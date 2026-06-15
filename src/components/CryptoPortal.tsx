@@ -1,5 +1,14 @@
 import React, { useState, FormEvent } from "react";
-import { ArrowRight, CircleCheck, Loader2, ArrowLeft, ShieldCheck, TrendingUp, Cpu, Server } from "lucide-react";
+import {
+  ArrowRight,
+  CircleCheck,
+  Loader2,
+  ArrowLeft,
+  ShieldCheck,
+  TrendingUp,
+  Cpu,
+  Server,
+} from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { submitLeadToCRM } from "@/lib/crmService";
 import { toast } from "sonner";
@@ -68,11 +77,15 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <span className="hidden sm:inline">Retour à l'accueil</span>
             <span className="inline sm:hidden">Retour</span>
           </button>
-          
+
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="serif text-lg sm:text-xl font-black tracking-tight text-white">Finastra Daily</span>
+            <span className="serif text-lg sm:text-xl font-black tracking-tight text-white">
+              Finastra Daily
+            </span>
             <span className="h-4 w-px bg-zinc-800 hidden sm:inline" />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-medium hidden md:inline">Portail Trading</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-medium hidden md:inline">
+              Portail Trading
+            </span>
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2 bg-zinc-900 border border-zinc-800 px-2 sm:px-2.5 py-1 rounded-full text-[8px] sm:text-[9px]">
@@ -95,7 +108,6 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
 
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="grid gap-12 lg:grid-cols-[1fr_450px] items-center">
-            
             {/* Premium White Registration Form (Shows FIRST on mobile/tablet via DOM order, and SECOND on desktop via order-2) */}
             <div className="relative lg:order-2">
               <div className="relative border border-zinc-200 bg-white text-zinc-950 rounded-xl p-6 md:p-8">
@@ -104,7 +116,9 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                     <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
                       <div className="flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-black animate-pulse" />
-                        <span className="text-xs font-bold text-zinc-500 font-mono tracking-wider">PORTS DE TRADING EN LIGNE</span>
+                        <span className="text-xs font-bold text-zinc-500 font-mono tracking-wider">
+                          PORTS DE TRADING EN LIGNE
+                        </span>
                       </div>
                     </div>
 
@@ -113,13 +127,17 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                         Demander un accès sécurisé
                       </h3>
                       <p className="text-sm text-zinc-500 text-left font-light">
-                        Soumettez vos coordonnées pour connecter votre portefeuille à notre bureau algorithmique.
+                        Soumettez vos coordonnées pour connecter votre portefeuille à notre bureau
+                        algorithmique.
                       </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="space-y-1.5">
-                        <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
+                        <Label
+                          htmlFor="name"
+                          className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left"
+                        >
                           Nom complet
                         </Label>
                         <input
@@ -134,7 +152,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                       </div>
 
                       <div className="space-y-1.5">
-                        <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
+                        <Label
+                          htmlFor="email"
+                          className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left"
+                        >
                           Adresse e-mail
                         </Label>
                         <input
@@ -149,7 +170,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                       </div>
 
                       <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
+                        <Label
+                          htmlFor="phone"
+                          className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left"
+                        >
                           Numéro de téléphone
                         </Label>
                         <input
@@ -164,8 +188,12 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                       </div>
 
                       <div className="space-y-1.5">
-                        <Label htmlFor="message" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
-                          Message <span className="text-zinc-400 font-normal lowercase">(facultatif)</span>
+                        <Label
+                          htmlFor="message"
+                          className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left"
+                        >
+                          Message{" "}
+                          <span className="text-zinc-400 font-normal lowercase">(facultatif)</span>
                         </Label>
                         <textarea
                           id="message"
@@ -220,7 +248,8 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                     <div className="space-y-2">
                       <h3 className="text-xl font-bold text-zinc-950 font-sans">Accès Réservé</h3>
                       <p className="text-sm text-zinc-500 max-w-xs mx-auto font-light leading-relaxed">
-                        Votre demande d'allocation a été validée et transmise à notre bureau de trading. Notre équipe vous contactera par e-mail dans les plus brefs délais.
+                        Votre demande d'allocation a été validée et transmise à notre bureau de
+                        trading. Notre équipe vous contactera par e-mail dans les plus brefs délais.
                       </p>
                     </div>
 
@@ -247,14 +276,18 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
               <h1 className="serif text-3xl sm:text-4xl font-black leading-[1.15] text-white md:text-5xl lg:text-6xl">
                 Bureau Quantitatif de Trading Crypto & IA.
               </h1>
-              
+
               <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-2xl font-light">
-                Le desk de trading automatique de Finastra Daily combine des modèles de langage avancés (LLM) et des algorithmes d'arbitrage à ultra-basse latence pour identifier les déséquilibres d'orderbook sur 45 plateformes d'échange européennes.
+                Le desk de trading automatique de Finastra Daily combine des modèles de langage
+                avancés (LLM) et des algorithmes d'arbitrage à ultra-basse latence pour identifier
+                les déséquilibres d'orderbook sur 45 plateformes d'échange européennes.
               </p>
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Perf. Moyenne 24h</div>
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
+                    Perf. Moyenne 24h
+                  </div>
                   <div className="text-2xl font-bold text-white mt-1 flex items-center gap-1 font-mono">
                     <TrendingUp className="h-5 w-5 text-white" />
                     +2.84%
@@ -262,12 +295,16 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 </div>
 
                 <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Volume Géré</div>
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
+                    Volume Géré
+                  </div>
                   <div className="text-2xl font-bold text-white mt-1 font-mono">12.4M €</div>
                 </div>
 
                 <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Temps de Réponse</div>
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
+                    Temps de Réponse
+                  </div>
                   <div className="text-2xl font-bold text-white mt-1 font-mono">140µs</div>
                 </div>
               </div>
@@ -287,7 +324,6 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </section>
@@ -297,8 +333,12 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Flux en Direct</div>
-              <h2 className="serif text-2xl sm:text-3xl font-bold text-white mt-1">Données Techniques du Pool Algorithmique</h2>
+              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">
+                Flux en Direct
+              </div>
+              <h2 className="serif text-2xl sm:text-3xl font-bold text-white mt-1">
+                Données Techniques du Pool Algorithmique
+              </h2>
             </div>
             <div className="text-zinc-500 text-xs font-mono">
               Mis à jour : En direct de Francfort · Flux SSL Activé
@@ -309,25 +349,35 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Bitcoin / EUR</span>
-                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+4.12%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">
+                  +4.12%
+                </span>
               </div>
               <div className="text-2xl sm:text-3xl font-bold font-mono text-white">58,740.00 €</div>
-              <div className="text-xs text-zinc-500">Moyenne pondérée du carnet d'ordres globale</div>
+              <div className="text-xs text-zinc-500">
+                Moyenne pondérée du carnet d'ordres globale
+              </div>
             </div>
 
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Ethereum / EUR</span>
-                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+3.28%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">
+                  +3.28%
+                </span>
               </div>
               <div className="text-2xl sm:text-3xl font-bold font-mono text-white">3,145.50 €</div>
-              <div className="text-xs text-zinc-500">Flux d'exécution de gaz intelligent optimisé</div>
+              <div className="text-xs text-zinc-500">
+                Flux d'exécution de gaz intelligent optimisé
+              </div>
             </div>
 
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Solana / EUR</span>
-                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+8.65%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">
+                  +8.65%
+                </span>
               </div>
               <div className="text-2xl sm:text-3xl font-bold font-mono text-white">142.10 €</div>
               <div className="text-xs text-zinc-500">Fréquence de routage ultra-rapide active</div>
@@ -340,19 +390,23 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       <section className="py-20 bg-zinc-900/30 border-b border-zinc-900">
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="mb-12 text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Recherche et Analyses</span>
-            <h2 className="serif text-2xl sm:text-3xl md:text-4xl font-black text-white">Notes du Bureau Quantitatif</h2>
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">
+              Recherche et Analyses
+            </span>
+            <h2 className="serif text-2xl sm:text-3xl md:text-4xl font-black text-white">
+              Notes du Bureau Quantitatif
+            </h2>
             <p className="text-zinc-500 text-sm font-light">
-              Des rapports approfondis rédigés par nos analystes financiers et nos ingénieurs système sur l'avenir de l'automatisation.
+              Des rapports approfondis rédigés par nos analystes financiers et nos ingénieurs
+              système sur l'avenir de l'automatisation.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            
             {/* Article 1 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <img 
+                <img
                   src={algoImg}
                   alt="Algorithme d'arbitrage crypto"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -363,17 +417,20 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
               </div>
               <div className="text-zinc-500 text-xs font-mono">15 juin 2026 · 8 min de lecture</div>
               <h3 className="serif text-xl font-bold text-white group-hover:text-zinc-400 transition-colors leading-snug">
-                L'Arbitrage Algorithmique : Comment l'IA redéfinit la gestion des risques crypto en 2026.
+                L'Arbitrage Algorithmique : Comment l'IA redéfinit la gestion des risques crypto en
+                2026.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
-                Les desks de trading quantitatif parisiens et francfortois utilisent désormais des réseaux de neurones profonds pour identifier les micro-écarts de prix en temps réel sur 45 plateformes d'échange.
+                Les desks de trading quantitatif parisiens et francfortois utilisent désormais des
+                réseaux de neurones profonds pour identifier les micro-écarts de prix en temps réel
+                sur 45 plateformes d'échange.
               </p>
             </article>
 
             {/* Article 2 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <img 
+                <img
                   src={complianceImg}
                   alt="Réglementation MiCA et conformité"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -387,14 +444,16 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 Comprendre la conformité MiCA et la protection des investisseurs en Europe.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
-                La nouvelle réglementation européenne harmonise le marché des crypto-actifs. Analyse des garanties offertes aux investisseurs qualifiés et particuliers sous le nouveau régime.
+                La nouvelle réglementation européenne harmonise le marché des crypto-actifs. Analyse
+                des garanties offertes aux investisseurs qualifiés et particuliers sous le nouveau
+                régime.
               </p>
             </article>
 
             {/* Article 3 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <img 
+                <img
                   src={reserveImg}
                   alt="Bitcoin comme actif de réserve"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -403,15 +462,18 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                   Macroéconomie
                 </div>
               </div>
-              <div className="text-zinc-500 text-xs font-mono">10 juin 2026 · 10 min de lecture</div>
+              <div className="text-zinc-500 text-xs font-mono">
+                10 juin 2026 · 10 min de lecture
+              </div>
               <h3 className="serif text-xl font-bold text-white group-hover:text-zinc-400 transition-colors leading-snug">
                 La transition du Bitcoin vers un actif de réserve macroéconomique stable.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
-                Alors que les banques nationales européennes intègrent discrètement le Bitcoin dans leurs réserves stratégiques, la volatilité historique laisse place à une liquidité mature.
+                Alors que les banques nationales européennes intègrent discrètement le Bitcoin dans
+                leurs réserves stratégiques, la volatilité historique laisse place à une liquidité
+                mature.
               </p>
             </article>
-
           </div>
         </div>
       </section>
@@ -419,8 +481,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       {/* Technical FAQ / Platform Info */}
       <section className="py-20 bg-zinc-950 border-b border-zinc-900">
         <div className="mx-auto max-w-[900px] px-4 space-y-12 text-left">
-          <h2 className="serif text-2xl sm:text-3xl font-bold text-white text-center">Spécifications du Système</h2>
-          
+          <h2 className="serif text-2xl sm:text-3xl font-bold text-white text-center">
+            Spécifications du Système
+          </h2>
+
           <div className="grid gap-8 sm:grid-cols-2">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-white">
@@ -428,7 +492,9 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 <h4 className="font-semibold text-white">Analyse des flux LLM</h4>
               </div>
               <p className="text-sm text-zinc-400 leading-relaxed font-light">
-                Nos modèles traitent plus de 10 000 articles de presse, tweets financiers et communiqués de banques centrales par minute pour prédire les mouvements de marché de court terme.
+                Nos modèles traitent plus de 10 000 articles de presse, tweets financiers et
+                communiqués de banques centrales par minute pour prédire les mouvements de marché de
+                court terme.
               </p>
             </div>
 
@@ -438,7 +504,8 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 <h4 className="font-semibold text-white">Frais de Performance transparents</h4>
               </div>
               <p className="text-sm text-zinc-400 leading-relaxed font-light">
-                Nous prélevons une commission de 15% uniquement sur les gains générés. Si les algorithmes ne génèrent pas de profit, aucun frais n'est appliqué.
+                Nous prélevons une commission de 15% uniquement sur les gains générés. Si les
+                algorithmes ne génèrent pas de profit, aucun frais n'est appliqué.
               </p>
             </div>
           </div>
@@ -450,7 +517,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
         <div className="mx-auto max-w-[1320px] px-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <div>© 1887–2026 Finastra Daily. Bureau Quantitaire Crypto-Actifs.</div>
-            <div className="mt-1 text-zinc-600">Les investissements dans les actifs numériques comportent des risques importants de perte en capital.</div>
+            <div className="mt-1 text-zinc-600">
+              Les investissements dans les actifs numériques comportent des risques importants de
+              perte en capital.
+            </div>
           </div>
           <button
             onClick={onBack}

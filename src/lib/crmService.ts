@@ -9,7 +9,7 @@ export interface LeadSubmissionData {
 export interface SubmissionResponse {
   success: boolean;
   message: string;
-  error?: any;
+  error?: unknown;
 }
 
 const CRM_HOST = import.meta.env.VITE_CRM_HOST || "https://crm.leadmanagement.api";
@@ -38,7 +38,11 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
     },
   };
 
-  const endpoint = `${CRM_HOST.replace(/\/$/, "")}/api/lead_management/api/affiliates`;
+  let endpoint = CRM_HOST.trim().replace(/\/$/, "");
+  const apiPath = "/api/lead_management/api/affiliates";
+  if (!endpoint.includes(apiPath)) {
+    endpoint = `${endpoint}${apiPath}`;
+  }
 
   console.log("Submitting lead to CRM:", {
     endpoint,
@@ -50,7 +54,7 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization": CRM_AUTH_TOKEN,
+        authorization: CRM_AUTH_TOKEN,
       },
       body: JSON.stringify(payload),
     });
@@ -75,23 +79,29 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       success: true,
       message: "Lead successfully created in CRM.",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("CRM submission error:", error);
-    
+
     // Check if this looks like a CORS error (network request failed but status code is absent)
     const isCorsOrNetworkError = error instanceof TypeError && error.message === "Failed to fetch";
-    
+
+    const errMessage =
+      error instanceof Error
+        ? error.message
+        : "An unexpected error occurred during lead submission.";
+
     if (isCorsOrNetworkError) {
       return {
         success: false,
-        message: "Network request failed. This is likely due to CORS restrictions on the CRM server or an invalid host URL.",
+        message:
+          "Network request failed. This is likely due to CORS restrictions on the CRM server or an invalid host URL.",
         error,
       };
     }
 
     return {
       success: false,
-      message: error.message || "An unexpected error occurred during lead submission.",
+      message: errMessage,
       error,
     };
   }
