@@ -217,11 +217,11 @@ function Article() {
             </div>
 
             <h1 className="serif text-4xl font-black leading-[1.1] tracking-tight md:text-6xl">
-              European Investors Shift Toward AI-Powered Crypto Trading Platforms Amid Market Volatility
+              On Air: Podcast Host Léa Fontaine Grills Europe's Top AI Trader on the Future of Crypto
             </h1>
             <p className="mt-5 serif text-xl italic text-muted-foreground md:text-2xl">
-              From Frankfurt to Lisbon, a new generation of algorithmic trading systems is quietly reshaping how
-              the continent's retail and institutional capital interacts with digital assets — and regulators are paying close attention.
+              In a candid studio conversation, the host of <em>Capital Signals</em> sits down with a leading
+              algorithmic fund manager to ask the questions every European investor is whispering about AI-powered crypto trading.
             </p>
 
             {/* Meta */}
@@ -234,7 +234,7 @@ function Article() {
                 </span>
               </A>
               <div className="text-muted-foreground">Published <time>15 June 2026, 06:00 CET</time> · Updated 09:42</div>
-              <div className="text-muted-foreground">⏱ 14 min read</div>
+              <div className="text-muted-foreground">⏱ 6 min read</div>
               <A className="text-muted-foreground hover:text-accent">Edited by Henrik Dahl</A>
               <A className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Fact-checked</A>
               <div className="ml-auto flex gap-2">
@@ -246,11 +246,12 @@ function Article() {
 
             {/* Hero */}
             <A className="mt-8 block">
-              <img src={heroImg} alt="European skyline at dusk overlaid with financial data" width={1600} height={900} className="w-full" />
+              <img src={heroImg} alt="Podcast host Léa Fontaine interviewing a guest in the Capital Signals studio" width={1600} height={900} className="w-full" />
               <figcaption className="mt-2 text-xs text-muted-foreground">
-                A view over Frankfurt's financial district. Algorithmic trading now accounts for an estimated 71% of EU crypto volume. <span className="italic">Photograph: The European Ledger / Archive</span>
+                Podcast host Léa Fontaine (right) interviewing her guest on the <em>Capital Signals</em> show, recorded live in Frankfurt. <span className="italic">Photograph: The European Ledger / Studio</span>
               </figcaption>
             </A>
+
 
             {/* Body */}
             <div className="prose-article mt-10 max-w-[68ch] space-y-6 text-[17px] leading-[1.75] text-ink/90">
