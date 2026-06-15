@@ -4,6 +4,10 @@ import { Label } from "@/components/ui/label";
 import { submitLeadToCRM } from "@/lib/crmService";
 import { toast } from "sonner";
 
+import algoImg from "@/assets/crypto_trading_algo.png";
+import complianceImg from "@/assets/crypto_compliance_mica.png";
+import reserveImg from "@/assets/bitcoin_reserve_asset.png";
+
 interface CryptoPortalProps {
   onBack: () => void;
 }
@@ -78,71 +82,19 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       </header>
 
       {/* Hero / Form Section */}
-      <section className="relative overflow-hidden border-b border-zinc-900 py-16 lg:py-24 crypto-grid-bg">
+      <section className="relative overflow-hidden border-b border-zinc-900 py-16 lg:py-24">
+        {/* Grid background (masked to only background) */}
+        <div className="absolute inset-0 -z-20 crypto-grid-bg" />
+
         {/* Decorative background glow (subtle gray) */}
         <div className="absolute top-1/4 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-[120px]" />
 
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="grid gap-12 lg:grid-cols-[1fr_450px] items-center">
             
-            {/* Value Proposition */}
-            <div className="space-y-8 text-left">
-              <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-md">
-                <ShieldCheck className="h-4 w-4 text-white" />
-                <span className="text-xs font-semibold text-zinc-300 font-mono uppercase tracking-wider">
-                  Accès Algorithmique Protégé · Réglementation MiCA
-                </span>
-              </div>
-
-              <h1 className="serif text-4xl font-black leading-[1.15] text-white md:text-5xl lg:text-6xl">
-                Bureau Quantitatif de Trading Crypto & IA.
-              </h1>
-              
-              <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-2xl font-light">
-                Le desk de trading automatique de Finastra Daily combine des modèles de langage avancés (LLM) et des algorithmes d'arbitrage à ultra-basse latence pour identifier les déséquilibres d'orderbook sur 45 plateformes d'échange européennes.
-              </p>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Perf. Moyenne 24h</div>
-                  <div className="text-2xl font-bold text-white mt-1 flex items-center gap-1 font-mono">
-                    <TrendingUp className="h-5 w-5 text-white" />
-                    +2.84%
-                  </div>
-                </div>
-
-                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Volume Géré</div>
-                  <div className="text-2xl font-bold text-white mt-1 font-mono">12.4M €</div>
-                </div>
-
-                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
-                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Temps de Réponse</div>
-                  <div className="text-2xl font-bold text-white mt-1 font-mono">140µs</div>
-                </div>
-              </div>
-
-              <ul className="space-y-3 text-sm text-zinc-400">
-                <li className="flex items-center gap-2">
-                  <span className="text-white font-mono">✓</span>
-                  Aucune période de blocage — Retraits flexibles sous 24h
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-white font-mono">✓</span>
-                  Sécurité de niveau institutionnel avec garde cryptée à froid
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-white font-mono">✓</span>
-                  Conformité totale avec les règlements européens sur les marchés d'actifs
-                </li>
-              </ul>
-            </div>
-
-            {/* Premium White Registration Form */}
-            <div className="relative">
-              <div className="absolute -inset-1 rounded-2xl bg-zinc-800/20 blur-xl opacity-60 pointer-events-none" />
-              
-              <div className="relative border border-zinc-200 bg-white text-zinc-950 rounded-xl p-6 md:p-8 shadow-2xl">
+            {/* Premium White Registration Form (Shows FIRST on mobile/tablet via DOM order, and SECOND on desktop via order-2) */}
+            <div className="relative lg:order-2">
+              <div className="relative border border-zinc-200 bg-white text-zinc-950 rounded-xl p-6 md:p-8">
                 {!isSubmitted ? (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
@@ -279,6 +231,59 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
               </div>
             </div>
 
+            {/* Value Proposition (Shows SECOND on mobile/tablet via DOM order, and FIRST on desktop via order-1) */}
+            <div className="space-y-8 text-left lg:order-1">
+              <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-md">
+                <ShieldCheck className="h-4 w-4 text-white" />
+                <span className="text-xs font-semibold text-zinc-300 font-mono uppercase tracking-wider">
+                  Accès Algorithmique Protégé · Réglementation MiCA
+                </span>
+              </div>
+
+              <h1 className="serif text-4xl font-black leading-[1.15] text-white md:text-5xl lg:text-6xl">
+                Bureau Quantitatif de Trading Crypto & IA.
+              </h1>
+              
+              <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-2xl font-light">
+                Le desk de trading automatique de Finastra Daily combine des modèles de langage avancés (LLM) et des algorithmes d'arbitrage à ultra-basse latence pour identifier les déséquilibres d'orderbook sur 45 plateformes d'échange européennes.
+              </p>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Perf. Moyenne 24h</div>
+                  <div className="text-2xl font-bold text-white mt-1 flex items-center gap-1 font-mono">
+                    <TrendingUp className="h-5 w-5 text-white" />
+                    +2.84%
+                  </div>
+                </div>
+
+                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Volume Géré</div>
+                  <div className="text-2xl font-bold text-white mt-1 font-mono">12.4M €</div>
+                </div>
+
+                <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
+                  <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Temps de Réponse</div>
+                  <div className="text-2xl font-bold text-white mt-1 font-mono">140µs</div>
+                </div>
+              </div>
+
+              <ul className="space-y-3 text-sm text-zinc-400">
+                <li className="flex items-center gap-2">
+                  <span className="text-white font-mono">✓</span>
+                  Aucune période de blocage — Retraits flexibles sous 24h
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-white font-mono">✓</span>
+                  Sécurité de niveau institutionnel avec garde cryptée à froid
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-white font-mono">✓</span>
+                  Conformité totale avec les règlements européens sur les marchés d'actifs
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </section>
@@ -343,11 +348,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             {/* Article 1 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <div 
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    backgroundImage: "linear-gradient(135deg, oklch(0.25 0.08 240) 0%, oklch(0.15 0.05 280) 100%)"
-                  }}
+                <img 
+                  src={algoImg}
+                  alt="Algorithme d'arbitrage crypto"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Technique
@@ -365,11 +369,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             {/* Article 2 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <div 
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    backgroundImage: "linear-gradient(135deg, oklch(0.25 0.05 150) 0%, oklch(0.15 0.03 180) 100%)"
-                  }}
+                <img 
+                  src={complianceImg}
+                  alt="Réglementation MiCA et conformité"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Réglementation
@@ -387,11 +390,10 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             {/* Article 3 */}
             <article className="group space-y-4">
               <div className="aspect-[16/9] w-full overflow-hidden bg-zinc-800 rounded-lg relative border border-zinc-800">
-                <div 
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    backgroundImage: "linear-gradient(135deg, oklch(0.25 0.08 30) 0%, oklch(0.15 0.04 60) 100%)"
-                  }}
+                <img 
+                  src={reserveImg}
+                  alt="Bitcoin comme actif de réserve"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Macroéconomie
