@@ -100,11 +100,8 @@ const related = [
   { cat: "Economy", title: "The euro's surprising resilience in a digital age", sum: "Analysts weigh the impact of CBDC pilots on FX markets." },
   { cat: "Opinion", title: "Innovation needs patience, not panic", sum: "A senior banker's view on the next regulatory cycle." },
   { cat: "Technology", title: "Inside the data centres powering EU AI trading", sum: "Energy contracts, latency wars and a new geography of finance." },
-  { cat: "Crypto", title: "Stablecoins as Europe's quiet payment rails", sum: "Cross-border flows tell a story policymakers cannot ignore." },
-  { cat: "Markets", title: "The ETF arms race comes to Amsterdam", sum: "Issuers fight for shelf space in a maturing product lineup." },
-  { cat: "AI", title: "Sentiment models, social media and the new volatility", sum: "Quants explain why the inputs are changing faster than the outputs." },
-  { cat: "Business", title: "From Tallinn to Tel Aviv: the new fintech corridor", sum: "A generation of founders is rewriting the European map." },
 ];
+
 
 const commentNames = [
   "Marc Lefèvre","Anneliese Hoffmann","Giulia Romano","Henrik Sørensen","Pilar Navarro","Tomáš Novák","Élodie Bernard","Lukas Berger",
