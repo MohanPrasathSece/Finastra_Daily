@@ -1,95 +1,111 @@
-import React from "react";
+import React, { useState, useContext, createContext, FormEvent } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster, toast } from "sonner";
+import { Coins, ArrowRight, CircleCheck, ShieldCheck, Loader2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { submitLeadToCRM } from "@/lib/crmService";
 import heroImg from "@/assets/hero.png";
 import "./styles.css";
 
-const URL = "https://www.egitel.com/5itg7bhhf71/tradegpt/?lang=fr&aff_id=3408";
+const ModalContext = createContext<{ openModal: () => void }>({ openModal: () => {} });
 
-const A = ({ children, className = "", ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-  <a href={URL} target="_blank" rel="noopener noreferrer" className={className} {...rest}>
-    {children}
-  </a>
-);
+const A = ({ children, className = "", onClick, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+  const { openModal } = useContext(ModalContext);
 
-const utilityLinks = ["Subscribe", "Login", "Register", "Premium", "Newsletters", "Podcasts", "Mobile App", "Events", "Careers", "Contact"];
-const nav = ["Home","Latest News","Politics","Business","Economy","Finance","Markets","Crypto","Blockchain","Technology","Artificial Intelligence","Startups","Energy","Environment","Science","Opinion","Videos","Podcasts","Education","Lifestyle","Travel","Culture","Sports"];
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (onClick) onClick(e);
+    openModal();
+  };
+
+  return (
+    <a href="#" className={className} onClick={handleClick} {...rest}>
+      {children}
+    </a>
+  );
+};
+
+const utilityLinks = ["S'abonner", "Se connecter", "S'inscrire", "Premium", "Infolettres", "Podcasts", "App Mobile", "Événements", "Carrières", "Contact"];
+const nav = ["Accueil","Dernières Nouvelles","Politique","Affaires","Économie","Finance","Marchés","Crypto","Blockchain","Technologie","Intelligence Artificielle","Startups","Énergie","Environnement","Sciences","Opinion","Vidéos","Podcasts","Éducation","Style de vie","Voyage","Culture","Sports"];
 const ticker = [
-  "ECB signals cautious optimism on digital euro pilot phase",
-  "Bitcoin reclaims €58,000 as European ETFs see record inflows",
-  "Frankfurt fintechs raise €2.3bn in Q3 funding round",
-  "AI trading desks outperform human-led funds for third consecutive quarter",
-  "MiCA regulation enters second compliance window",
-  "Paris-based hedge fund launches on-chain credit strategy",
-  "Ethereum validators surpass 1.1 million milestone",
-  "Swiss National Bank publishes tokenisation framework",
-  "Stablecoin volumes in EU jump 47% year-on-year",
-  "London exchange debuts AI-managed crypto index",
-  "Banco Santander expands custody services to retail",
-  "Lithuania approves new digital asset licensing rules",
-  "Nordic energy firms tokenise carbon credits",
-  "EU Parliament debates AI Act amendments for finance",
-  "Tether reports €92bn in EU reserves",
-  "Coinbase opens new compliance hub in Dublin",
-  "Algorithmic trading now accounts for 71% of EU crypto volume",
-  "Spanish regulator fines unlicensed broker €4.1m",
-  "Deutsche Börse opens regulated DeFi window",
-  "AI sentiment models forecast a calmer Q4 for digital assets",
+  "La BCE exprime un optimisme prudent sur la phase pilote de l'euro numérique",
+  "Le Bitcoin repasse les 58 000 € alors que les ETF européens enregistrent des entrées records",
+  "Les fintechs de Francfort lèvent 2,3 milliards d'euros au troisième trimestre",
+  "Les desks de trading IA surperforment les fonds gérés par des humains pour le 3e trimestre consécutif",
+  "La réglementation MiCA entre dans sa deuxième phase de conformité",
+  "Un hedge fund parisien lance une stratégie de crédit on-chain",
+  "Les validateurs Ethereum dépassent le cap des 1,1 million",
+  "La Banque nationale suisse publie un cadre pour la tokenisation",
+  "Les volumes de stablecoins dans l'UE bondissent de 47% sur un an",
+  "La bourse de Londres lance un indice crypto géré par l'IA",
+  "Banco Santander étend ses services de garde aux particuliers",
+  "La Lituanie approuve de nouvelles règles de licence pour les actifs numériques",
+  "Des entreprises énergétiques nordiques tokenisent les crédits carbone",
+  "Le Parlement européen débat des amendements à l'AI Act pour la finance",
+  "Tether déclare 92 milliards d'euros de réserves dans l'UE",
+  "Coinbase ouvre un nouveau centre de conformité à Dublin",
+  "Le trading algorithmique représente désormais 71% du volume crypto dans l'UE",
+  "Le régulateur espagnol inflige une amende de 4,1 M€ à un courtier non agréé",
+  "Deutsche Börse ouvre un guichet DeFi réglementé",
+  "Les modèles de sentiment IA prévoient un quatrième trimestre plus calme pour les actifs numériques",
 ];
 
 const sidebarLists: { title: string; items: string[] }[] = [
-  { title: "Most Read", items: [
-    "Why European banks are quietly buying Bitcoin",
-    "The rise of algorithmic asset managers in Zürich",
-    "Inside the ECB's digital euro working group",
-    "How MiFID III could reshape retail trading",
-    "AI hedge funds and the new alpha frontier",
+  { title: "Les plus lus", items: [
+    "Pourquoi les banques européennes achètent discrètement du Bitcoin",
+    "L'essor des gestionnaires d'actifs algorithmiques à Zürich",
+    "Au cœur du groupe de travail de la BCE sur l'euro numérique",
+    "Comment MiFID III pourrait remodeler le trading de détail",
+    "Les hedge funds IA et la nouvelle frontière de l'alpha",
   ]},
-  { title: "Trending", items: [
-    "Lagarde: 'Innovation must not outpace stability'",
-    "London-Frankfurt corridor for tokenised bonds",
-    "Stablecoin issuers face new EU audit rules",
-    "The €1.8bn quiet bet on Layer-2 networks",
-    "Why volatility funds are hiring linguists",
+  { title: "Tendances", items: [
+    "Lagarde : « L'innovation ne doit pas primer sur la stabilité »",
+    "Le corridor Londres-Francfort pour les obligations tokenisées",
+    "Les émetteurs de stablecoins face aux nouvelles règles d'audit de l'UE",
+    "Le pari discret de 1,8 milliard d'euros sur les réseaux Layer-2",
+    "Pourquoi les fonds de volatilité recrutent des linguistes",
   ]},
-  { title: "Editor's Picks", items: [
-    "A reader's guide to the Markets in Crypto-Assets Act",
-    "Five charts that explain the new ETF era",
-    "Profile: the engineer behind Europe's largest DEX",
-    "What the Fed misses about European liquidity",
-    "An honest conversation about AI trading risk",
+  { title: "Sélection de la rédaction", items: [
+    "Guide de lecture de la loi sur les marchés de crypto-actifs (MiCA)",
+    "Cinq graphiques pour comprendre la nouvelle ère des ETF",
+    "Portrait : l'ingénieur derrière le plus grand DEX d'Europe",
+    "Ce que la Fed ne comprend pas sur la liquidité européenne",
+    "Une discussion honnête sur les risques du trading par IA",
   ]},
-  { title: "Latest News", items: [
-    "Brussels weighs new disclosure rules for AI funds",
-    "Italy launches sovereign blockchain testbed",
-    "ABN AMRO opens crypto desk to professional clients",
-    "Greek startup raises €40m for on-chain remittance",
-    "OECD updates digital asset tax guidance",
+  { title: "Dernières Nouvelles", items: [
+    "Bruxelles envisage de nouvelles règles de transparence pour les fonds IA",
+    "L'Italie lance un banc d'essai souverain de blockchain",
+    "ABN AMRO ouvre un desk crypto aux clients professionnels",
+    "Une startup grecque lève 40 M€ pour les transferts de fonds on-chain",
+    "L'OCDE met à jour ses directives fiscales sur les actifs numériques",
   ]},
-  { title: "Popular Crypto Stories", items: [
-    "Bitcoin's quietly stunning correlation shift",
-    "What Solana's outage really told us",
-    "MEV in Europe: the hidden tax on traders",
-    "How three women built a Berlin crypto bank",
-    "The case for boring blockchains",
+  { title: "Histoires Crypto Populaires", items: [
+    "Le changement de corrélation discret mais étonnant du Bitcoin",
+    "Ce que la panne de Solana nous a réellement appris",
+    "La MEV en Europe : la taxe cachée sur les traders",
+    "Comment trois femmes ont créé une banque crypto à Berlin",
+    "Le plaidoyer pour des blockchains ennuyeuses",
   ]},
-  { title: "Market Updates", items: [
-    "DAX closes flat ahead of ECB statement",
-    "Euro strengthens against the dollar",
-    "Brent crude slips on demand outlook",
-    "Gold steady near 12-month high",
-    "Bund yields edge lower in afternoon trade",
+  { title: "Mises à jour du marché", items: [
+    "Le DAX clôture stable avant la déclaration de la BCE",
+    "L'euro se renforce face au dollar",
+    "Le pétrole Brent recule face aux perspectives de la demande",
+    "L'or stable près de son plus haut sur 12 mois",
+    "Les rendements des Bunds reculent légèrement l'après-midi",
   ]},
 ];
 
 const related = [
-  { cat: "Markets", title: "Frankfurt opens regulated tokenised bond market", sum: "Deutsche Börse's new venue lists €4bn of debt in its first week." },
-  { cat: "AI", title: "The quiet machine learning revolution inside Paris trading desks", sum: "How three boutique firms are rewriting the alpha playbook." },
-  { cat: "Crypto", title: "Why Spanish retail flows are leading the European cycle", sum: "Banco BBVA's custody numbers reveal a structural shift." },
-  { cat: "Policy", title: "MiCA at six months: what has actually changed", sum: "A clear-eyed accounting of compliance, costs and customer outcomes." },
-  { cat: "Blockchain", title: "Tokenised real estate finds an audience in Lisbon", sum: "Portuguese platforms report 38% quarter-on-quarter growth." },
-  { cat: "Economy", title: "The euro's surprising resilience in a digital age", sum: "Analysts weigh the impact of CBDC pilots on FX markets." },
-  { cat: "Opinion", title: "Innovation needs patience, not panic", sum: "A senior banker's view on the next regulatory cycle." },
-  { cat: "Technology", title: "Inside the data centres powering EU AI trading", sum: "Energy contracts, latency wars and a new geography of finance." },
+  { cat: "Marchés", title: "Francfort ouvre un marché réglementé des obligations tokenisées", sum: "La nouvelle plateforme de Deutsche Börse enregistre 4 Mds € de dette pour sa première semaine." },
+  { cat: "IA", title: "La révolution silencieuse du machine learning dans les salles de marché parisiennes", sum: "Comment trois sociétés réécrivent les règles du jeu de l'alpha." },
+  { cat: "Crypto", title: "Pourquoi les flux de détail espagnols mènent le cycle européen", sum: "Les chiffres de garde de Banco BBVA révèlent un changement structurel." },
+  { cat: "Politique", title: "MiCA après six mois : qu'est-ce qui a réellement changé ?", sum: "Un bilan sans fard sur la conformité, les coûts et les résultats pour les clients." },
+  { cat: "Blockchain", title: "L'immobilier tokenisé trouve son public à Lisbonne", sum: "Les plateformes portugaises signalent une croissance de 38% d'un trimestre à l'autre." },
+  { cat: "Économie", title: "La surprenante résilience de l'euro à l'ère numérique", sum: "Les analystes évaluent l'impact des projets pilotes de MNBC sur les marchés des changes." },
+  { cat: "Opinion", title: "L'innovation exige de la patience, pas de la panique", sum: "L'avis d'un banquier de haut niveau sur le prochain cycle réglementaire." },
+  { cat: "Technologie", title: "Au cœur des centres de données qui alimentent le trading IA européen", sum: "Contrats d'énergie, guerres de latence et nouvelle géographie de la finance." },
 ];
 
 const commentNames = [
@@ -103,33 +119,33 @@ const commentNames = [
 ];
 
 const commentTexts = [
-  "Excellent piece. The point about latency arbitrage in regulated venues deserves a follow-up.",
-  "I'd love to see a comparison with the Asian markets, particularly Singapore.",
-  "Finally a balanced view. Most coverage either dismisses or worships these systems.",
-  "The MiCA section is spot on. We're already seeing compliance costs squeeze smaller brokers.",
-  "As someone working at a Paris desk, this matches what I'm seeing on the ground.",
-  "Curious about the energy footprint of these AI clusters. Worth a dedicated article.",
-  "Could the editor clarify which custodians were surveyed for the figures cited?",
-  "Brilliant analysis. Bookmarked for our internal research note.",
-  "The risk framing is refreshing. Not every algorithm is an oracle.",
-  "Looking forward to the follow-up on tokenised bonds.",
+  "Excellent article. Le point sur l'arbitrage de latence sur les plateformes réglementées mérite un suivi.",
+  "J'aimerais voir une comparaison avec les marchés asiatiques, en particulier Singapour.",
+  "Enfin un point de vue équilibré. La plupart des analyses soit rejettent, soit idolâtrent ces systèmes.",
+  "La section MiCA est très juste. Nous constatons déjà que les coûts de conformité pèsent sur les petits courtiers.",
+  "Travaillant dans une salle de marché parisienne, cela correspond tout à fait à ce que je vois sur le terrain.",
+  "Curieux de connaître l'empreinte énergétique de ces clusters IA. Cela vaudrait un article dédié.",
+  "La rédaction pourrait-elle préciser quels dépositaires ont été interrogés pour obtenir les chiffres cités ?",
+  "Brillante analyse. Enregistré pour notre note de recherche interne.",
+  "La façon de poser le risque est rafraîchissante. Tous les algorithmes ne sont pas des oracles.",
+  "J'attends avec impatience le suivi sur les obligations tokenisées.",
 ];
 
 const footerCols: { title: string; items: string[] }[] = [
-  { title: "News", items: ["News","Politics","Business","Economy","Technology","Science","Culture","Sports","Opinion","Crypto"] },
-  { title: "Finance", items: ["Markets","Trading","Investing","Banking","Commodities","Forex","Stocks","Funds","Analysis","Reports"] },
-  { title: "Company", items: ["About","Careers","Press","Contact","Newsroom","Advertise","Partnerships","Events","Support","Masthead"] },
-  { title: "Legal", items: ["Terms","Privacy","Cookies","Accessibility","Compliance","Editorial Policy","User Agreement","Disclosures","Security","Imprint"] },
-  { title: "Products", items: ["Apps","Premium","Newsletter","Podcasts","Video","Archive","Research","Education","Community","Crosswords"] },
+  { title: "Actualités", items: ["Nouvelles","Politique","Affaires","Économie","Technologie","Sciences","Culture","Sports","Opinion","Crypto"] },
+  { title: "Finance", items: ["Marchés","Trading","Investissement","Banque","Matières Premières","Forex","Actions","Fonds","Analyses","Rapports"] },
+  { title: "Société", items: ["À propos","Carrières","Presse","Contact","Salle de presse","Publicité","Partenariats","Événements","Support","Équipe éditoriale"] },
+  { title: "Juridique", items: ["Conditions d'utilisation","Confidentialité","Cookies","Accessibilité","Conformité","Charte éditoriale","Accord de l'utilisateur","Divulgations","Sécurité","Mentions légales"] },
+  { title: "Produits", items: ["Applications","Premium","Infolettre","Podcasts","Vidéo","Archives","Recherche","Éducation","Communauté","Mots croisés"] },
 ];
 
 const socials = ["Facebook","Instagram","X / Twitter","LinkedIn","YouTube","Telegram","WhatsApp","Reddit","TikTok","Threads"];
 
 const partnerSections = [
-  { title: "Partner Publications", items: ["Frankfurter Wirtschaftsbrief","La Tribune Économique","Mediterraneo Finanza","Nordic Capital Review","Iberia Markets Daily","Baltic Business Journal","Adriatic Finance Today","Helvetia Investor","Benelux Economic Times","Eastern Europe Markets"] },
-  { title: "Financial Guides", items: ["Beginner's Guide to ETFs","Understanding MiCA","Crypto Tax in the EU","Reading a Balance Sheet","Macro for Investors","Pension Planning Basics","Currency Hedging 101","Dividend Strategies","Risk-Adjusted Returns","Behavioural Finance"] },
-  { title: "Learning Resources", items: ["AI Trading Course","Blockchain Fundamentals","Market Microstructure","Portfolio Theory","Derivatives Explained","ESG Investing","Quant Bootcamp","Stablecoin Mechanics","DeFi Primer","On-Chain Analysis"] },
-  { title: "Market Reports", items: ["EU Quarterly Review","Digital Asset Outlook","European Bank Index","Energy Markets Brief","Tech Earnings Recap","Fixed Income Monitor","SME Lending Report","Real Estate Watch","Commodities Snapshot","Currency Forecast"] },
+  { title: "Publications partenaires", items: ["Frankfurter Wirtschaftsbrief","La Tribune Économique","Mediterraneo Finanza","Nordic Capital Review","Iberia Markets Daily","Baltic Business Journal","Adriatic Finance Today","Helvetia Investor","Benelux Economic Times","Eastern Europe Markets"] },
+  { title: "Guides financiers", items: ["Guide du débutant sur les ETF","Comprendre MiCA","Fiscalité crypto dans l'UE","Lire un bilan comptable","Macroéconomie pour investisseurs","Bases de la planification de retraite","Couverture de change 101","Stratégies de dividendes","Rendements ajustés au risque","Finance comportementale"] },
+  { title: "Ressources d'apprentissage", items: ["Cours de trading IA","Fondamentaux de la blockchain","Microstructure du marché","Théorie du portefeuille","Explication des dérivés","Investissement ESG","Bootcamp Quant","Mécanique des stablecoins","Introduction à la DeFi","Analyse on-chain"] },
+  { title: "Market Reports", items: ["Revue trimestrielle de l'UE","Perspectives des actifs numériques","Indice bancaire européen","Synthèse sur les marchés de l'énergie","Récapitulatif des résultats tech","Moniteur des taux fixes","Rapport sur le crédit aux PME","Observatoire de l'immobilier","Instantané des matières premières","Prévisions des devises"] },
 ];
 
 function PromoBlock({ kicker, title, cta, compact }: { kicker: string; title: string; cta: string; compact?: boolean }) {
@@ -169,12 +185,12 @@ function Article() {
       {/* Utility bar */}
       <div className="border-b border-rule bg-paper text-xs">
         <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-y-2 px-4 py-2">
-          <div className="hidden text-muted-foreground sm:block">Monday, 15 June 2026 · Frankfurt · 14°C</div>
+          <div className="hidden text-muted-foreground sm:block">Lundi 15 juin 2026 · Francfort · 14°C</div>
           <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
             {utilityLinks.map((l) => (
               <li key={l}><A className="text-ink/80 hover:text-accent">{l}</A></li>
             ))}
-            <li><A className="rounded-sm bg-accent px-2 py-1 font-semibold text-accent-foreground">Subscribe €1/month</A></li>
+            <li><A className="rounded-sm bg-accent px-2 py-1 font-semibold text-accent-foreground">S'abonner 1 €/mois</A></li>
           </ul>
         </div>
       </div>
@@ -184,15 +200,15 @@ function Article() {
         <div className="mx-auto max-w-[1320px] px-4 py-6">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
             <div className="hidden text-xs uppercase tracking-widest text-muted-foreground md:block">
-              Vol. CXIV · No. 24,318<br/>Independent since 1887
+              Vol. CXIV · N° 24 318<br/>Indépendant depuis 1887
             </div>
             <A className="text-center">
               <div className="serif text-4xl font-black tracking-tight md:text-6xl">Finastra Daily</div>
-              <div className="mt-1 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Finance · Policy · Innovation</div>
+              <div className="mt-1 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Finance · Politique · Innovation</div>
             </A>
             <div className="hidden justify-end gap-3 md:flex">
-              <A className="rounded border border-ink/30 px-3 py-1.5 text-xs font-semibold hover:bg-ink hover:text-background">Sign in</A>
-              <A className="rounded bg-ink px-3 py-1.5 text-xs font-semibold text-background hover:bg-accent">Try Premium</A>
+              <A className="rounded border border-ink/30 px-3 py-1.5 text-xs font-semibold hover:bg-ink hover:text-background">Se connecter</A>
+              <A className="rounded bg-ink px-3 py-1.5 text-xs font-semibold text-background hover:bg-accent">Essayer Premium</A>
               <A aria-label="Search" className="grid h-8 w-8 place-items-center rounded border border-ink/30">🔍</A>
             </div>
           </div>
@@ -211,7 +227,7 @@ function Article() {
 
         {/* Breaking ticker */}
         <div className="flex items-center gap-3 border-b border-rule bg-accent/5 px-4 py-2 text-sm">
-          <A className="shrink-0 rounded-sm bg-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-accent-foreground">Breaking</A>
+          <A className="shrink-0 rounded-sm bg-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-accent-foreground">Urgent</A>
           <div className="relative flex-1 overflow-hidden">
             <div className="flex w-max animate-ticker gap-10 whitespace-nowrap">
               {[...ticker, ...ticker].map((t, i) => (
@@ -225,7 +241,7 @@ function Article() {
       {/* Article + sidebar */}
       <main className="mx-auto max-w-[1320px] px-4 py-10">
         <nav className="mb-4 text-xs text-muted-foreground">
-          <A className="hover:text-accent">Home</A> / <A className="hover:text-accent">Markets</A> / <A className="hover:text-accent">Crypto</A> / <span className="text-ink">AI Trading</span>
+          <A className="hover:text-accent">Accueil</A> / <A className="hover:text-accent">Marchés</A> / <A className="hover:text-accent">Crypto</A> / <span className="text-ink">Trading IA</span>
         </nav>
 
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -237,11 +253,10 @@ function Article() {
             </div>
 
             <h1 className="serif text-4xl font-black leading-[1.1] tracking-tight md:text-6xl">
-              On Air: Podcast Host Léa Fontaine Grills Europe's Top AI Trader on the Future of Crypto
+              En direct : L'animatrice Léa Fontaine interroge le meilleur trader IA d'Europe sur l'avenir de la crypto
             </h1>
             <p className="mt-5 serif text-xl italic text-muted-foreground md:text-2xl">
-              In a candid studio conversation, the host of <em>Capital Signals</em> sits down with a leading
-              algorithmic fund manager to ask the questions every European investor is whispering about AI-powered crypto trading.
+              Dans une conversation sans fard en studio, l'animatrice de <em>Capital Signals</em> s'entretient avec un gestionnaire de fonds algorithmique de premier plan pour poser les questions que chaque investisseur européen se pose sur le trading de crypto par IA.
             </p>
 
             {/* Meta */}
@@ -249,14 +264,14 @@ function Article() {
               <A className="flex items-center gap-2">
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-muted serif text-sm font-bold">CV</span>
                 <span>
-                  <span className="block font-semibold">By Claire Vasseur</span>
-                  <span className="block text-xs text-muted-foreground">European Markets Correspondent</span>
+                  <span className="block font-semibold">Par Claire Vasseur</span>
+                  <span className="block text-xs text-muted-foreground">Correspondante Marchés Européens</span>
                 </span>
               </A>
-              <div className="text-muted-foreground">Published <time>15 June 2026, 06:00 CET</time> · Updated 09:42</div>
-              <div className="text-muted-foreground">⏱ 6 min read</div>
-              <A className="text-muted-foreground hover:text-accent">Edited by Henrik Dahl</A>
-              <div className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Fact-checked</div>
+              <div className="text-muted-foreground">Publié le <time>15 juin 2026, 06:00 CET</time> · Mis à jour à 09:42</div>
+              <div className="text-muted-foreground">⏱ 6 min de lecture</div>
+              <A className="text-muted-foreground hover:text-accent">Édité par Henrik Dahl</A>
+              <div className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Vérifié</div>
               <div className="ml-auto flex gap-2">
                 {["Share","Tweet","Email","Save","Print"].map((s) => (
                   <A key={s} className="rounded border border-rule px-2 py-1 text-xs hover:border-accent hover:text-accent">{s}</A>
@@ -266,9 +281,9 @@ function Article() {
 
             {/* Hero */}
             <A className="mt-8 block">
-              <img src={heroImg} alt="Swiss influencer talking on the Capital Signals podcast in Switzerland" width={1600} height={900} className="w-full" />
+              <img src={heroImg} alt="Un influenceur suisse parlant sur le podcast Capital Signals en Suisse" width={1600} height={900} className="w-full" />
               <figcaption className="mt-2 text-xs text-muted-foreground">
-                Swiss influencer (left) talking with the host on the <em>Capital Signals</em> show, recorded live in Zürich, Switzerland. <span className="italic">Photograph: Finastra Daily / Studio</span>
+                L'influenceur suisse (à gauche) s'entretient avec l'animatrice lors de l'émission <em>Capital Signals</em>, enregistrée en direct à Zürich, en Suisse. <span className="italic">Photographie : Finastra Daily / Studio</span>
               </figcaption>
             </A>
 
@@ -276,56 +291,56 @@ function Article() {
             {/* Body */}
             <div className="prose-article mt-10 max-w-[68ch] space-y-6 text-[17px] leading-[1.75] text-ink/90">
               <p className="drop-cap">
-                When podcast host Léa Fontaine invited one of Europe's most secretive AI fund managers onto <em>Capital Signals</em> this week, the conversation moved quickly from polite introductions to the questions retail investors actually want answered. What follows is an edited transcript of their on-air exchange.
+                Lorsque l'animatrice de podcast Léa Fontaine a invité cette semaine l'un des gestionnaires de fonds IA les plus secrets d'Europe sur le plateau de <em>Capital Signals</em>, la conversation est rapidement passée des présentations polies aux questions que les investisseurs particuliers veulent réellement poser. Voici une transcription éditée de leur échange en direct.
               </p>
 
-              <h2 className="serif !text-3xl font-bold !mt-12">"So — is the AI really doing the trading?"</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">« Alors — est-ce vraiment l'IA qui gère le trading ? »</h2>
               <p>
-                <strong>Léa Fontaine:</strong> Let's start with the question my listeners email me every single week. Is the AI really making the trades, or are humans still pulling the levers behind the scenes?
+                <strong>Léa Fontaine :</strong> Commençons par la question que mes auditeurs m'envoient par e-mail chaque semaine. Est-ce vraiment l'IA qui effectue les transactions, ou les humains tirent-ils toujours les ficelles en coulisses ?
               </p>
               <p>
-                <strong>Guest:</strong> Both, but not in the way people imagine. The models execute thousands of decisions a second — no human could. What we do is set the boundaries, approve new strategies, and step in when something looks wrong. Think of it as a very disciplined co-pilot.
+                <strong>Invité :</strong> Les deux, mais pas de la manière dont les gens l'imaginent. Les modèles exécutent des milliers de décisions par seconde — aucun humain n'en serait capable. Ce que nous faisons, c'est fixer les limites, approuver les nouvelles stratégies et intervenir lorsque quelque chose ne va pas. Considérez-le comme un copilote très discipliné.
               </p>
 
-              <PromoBlock kicker="Featured analysis" title="See the platform European investors are talking about" cta="Explore Platform" />
+              <PromoBlock kicker="Analyse à la une" title="Découvrez la plateforme dont parlent les investisseurs européens" cta="Explorer la plateforme" />
 
-              <h2 className="serif !text-3xl font-bold !mt-12">"Why are retail investors suddenly flooding in?"</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">« Pourquoi les investisseurs particuliers affluent-ils soudainement ? »</h2>
               <p>
-                <strong>Léa:</strong> Q2 retail subscriptions through bank-distributed crypto wrappers hit €4.1 billion. That's not a niche anymore. What changed?
+                <strong>Léa :</strong> Les souscriptions des particuliers au deuxième trimestre via des enveloppes crypto distribuées par les banques ont atteint 4,1 milliards d'euros. Ce n'est plus une niche. Qu'est-ce qui a changé ?
               </p>
               <p>
-                <strong>Guest:</strong> Two things. MiCA gave people a regulatory floor they trust, and platforms finally lowered the minimums. You no longer need a million euros to access an AI-managed crypto strategy — a few hundred is enough. That alone reshaped the audience overnight.
+                <strong>Invité :</strong> Deux choses. La réglementation MiCA a donné aux gens un cadre réglementaire de confiance, et les plateformes ont enfin abaissé les minimums. Vous n'avez plus besoin d'un million d'euros pour accéder à une stratégie crypto gérée par l'IA — quelques centaines d'euros suffisent. Cela a suffi à transformer le public du jour au lendemain.
               </p>
 
               <blockquote className="my-8 border-l-4 border-accent bg-accent/5 px-6 py-5 serif text-2xl italic leading-snug">
-                "The dream of beating the market with a clever human is finished. What we can do is build systems that listen to a thousand markets at once — and don't have a bad morning."
-                <footer className="mt-3 not-italic text-sm font-semibold text-muted-foreground">— On-air guest, <em>Capital Signals</em> Episode 142</footer>
+                « Le rêve de battre le marché grâce à un humain intelligent est révolu. Ce que nous pouvons faire, c'est construire des systèmes qui écoutent un millier de marchés à la fois — et n'ont pas de mauvaise matinée. »
+                <footer className="mt-3 not-italic text-sm font-semibold text-muted-foreground">— L'invité en direct, <em>Capital Signals</em> Épisode 142</footer>
               </blockquote>
 
-              <h2 className="serif !text-3xl font-bold !mt-12">"What could still blow up?"</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">« Qu'est-ce qui pourrait encore mal tourner ? »</h2>
               <p>
-                <strong>Léa:</strong> I have to ask. What's the scenario that keeps you awake at night?
+                <strong>Léa :</strong> Je dois vous poser la question. Quel est le scénario qui vous empêche de dormir la nuit ?
               </p>
               <p>
-                <strong>Guest:</strong> AI systems failing in correlated ways. If everyone runs similar models trained on similar data, a regime change none of them have seen could push them all the same direction at the same moment. We haven't lived through a real crisis with this much automation yet. The humility should be considerable.
+                <strong>Invité :</strong> Les systèmes d'IA qui échouent de manière corrélée. Si tout le monde fait tourner des modèles similaires entraînés sur des données similaires, un changement de régime qu'aucun d'eux n'a vu pourrait les pousser tous dans la même direction au même moment. Nous n'avons pas encore vécu de véritable crise avec autant d'automatisation. L'humilité doit être de mise.
               </p>
 
-              <PromoBlock kicker="Editor's recommendation" title="The official portal investors are using to access AI-managed strategies" cta="Visit Official Website" />
+              <PromoBlock kicker="Recommandation de la rédaction" title="Le portail officiel utilisé par les investisseurs pour accéder aux stratégies gérées par l'IA" cta="Visiter le site officiel" />
 
-              <h2 className="serif !text-3xl font-bold !mt-12">"What would you tell a first-time listener?"</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">« Que diriez-vous à un auditeur qui découvre le sujet ? »</h2>
               <p>
-                <strong>Léa:</strong> Last question. Someone is hearing about AI crypto trading for the first time on this podcast. What do they do tomorrow morning?
+                <strong>Léa :</strong> Dernière question. Quelqu'un entend parler de trading crypto par IA pour la première fois dans ce podcast. Que fait-il demain matin ?
               </p>
               <p>
-                <strong>Guest:</strong> Start small. Use a regulated, MiCA-licensed platform. Read the model-risk disclosure — actually read it. And remember that "AI-managed" is not a magic word. It's a tool. The boring investors usually win.
+                <strong>Invité :</strong> Commencez petit. Utilisez une plateforme réglementée, agréée MiCA. Lisez la divulgation des risques liés aux modèles — lisez-la vraiment. Et rappelez-vous que « géré par l'IA » n'est pas un mot magique. C'est un outil. Ce sont généralement les investisseurs pragmatiques qui gagnent.
               </p>
 
               <div className="mt-10 border-t border-rule pt-6 text-sm text-muted-foreground">
-                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>Finastra Daily</em>. The full <em>Capital Signals</em> episode is available on all major podcast platforms.</p>
+                <p><strong className="text-ink">Claire Vasseur</strong> est correspondante pour les marchés européens de <em>Finastra Daily</em>. L'épisode complet de <em>Capital Signals</em> est disponible sur toutes les principales plateformes de podcast.</p>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {["#Podcast","#AI","#Crypto","#Bitcoin","#MiCA","#Europe","#Trading","#Interview"].map((t) => (
+                {["#Podcast","#IA","#Crypto","#Bitcoin","#MiCA","#Europe","#Trading","#Interview"].map((t) => (
                   <A key={t} className="rounded-full border border-rule px-3 py-1 text-xs hover:border-accent hover:text-accent">{t}</A>
                 ))}
               </div>
@@ -335,7 +350,7 @@ function Article() {
 
           {/* Sidebar */}
           <aside className="space-y-8">
-            <PromoBlock compact kicker="Sponsored" title="Discover the AI trading platform changing European markets" cta="Visit Platform" />
+            <PromoBlock compact kicker="Sponsorisé" title="Découvrez la plateforme de trading IA qui transforme les marchés européens" cta="Visiter la plateforme" />
             {sidebarLists.map((s) => (
               <section key={s.title}>
                 <h3 className="mb-3 border-b-2 border-ink pb-2 text-xs font-bold uppercase tracking-widest">{s.title}</h3>
@@ -349,15 +364,15 @@ function Article() {
                 </ol>
               </section>
             ))}
-            <PromoBlock compact kicker="Premium" title="Unlock unlimited analysis and the daily market briefing" cta="Subscribe" />
+            <PromoBlock compact kicker="Premium" title="Débloquez des analyses illimitées et le briefing quotidien du marché" cta="S'abonner" />
           </aside>
         </div>
 
         {/* Related */}
         <section className="mt-20">
           <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
-            <h2 className="serif text-3xl font-bold">Related Articles</h2>
-            <A className="text-xs font-semibold uppercase tracking-widest">View all →</A>
+            <h2 className="serif text-3xl font-bold">Articles associés</h2>
+            <A className="text-xs font-semibold uppercase tracking-widest">Tout voir →</A>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {related.map((r, i) => <Card key={i} {...r} />)}
@@ -367,14 +382,14 @@ function Article() {
         {/* Comments */}
         <section className="mt-20">
           <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
-            <h2 className="serif text-3xl font-bold">Reader Comments <span className="text-muted-foreground">(10)</span></h2>
+            <h2 className="serif text-3xl font-bold">Commentaires des lecteurs <span className="text-muted-foreground">(10)</span></h2>
             <div className="flex gap-2">
-              {["Top","Newest","Oldest"].map((t) => <A key={t} className="text-xs font-semibold uppercase tracking-widest hover:text-accent">{t}</A>)}
+              {["Top","Newest","Oldest"].map((t) => <A key={t} className="text-xs font-semibold uppercase tracking-widest hover:text-accent">{t === "Top" ? "Pertinent" : t === "Newest" ? "Plus récent" : "Plus ancien"}</A>)}
             </div>
           </div>
 
           <A className="mb-8 block rounded border border-rule bg-paper p-4 text-muted-foreground">
-            Sign in to join the conversation →
+            Connectez-vous pour rejoindre la conversation →
           </A>
 
           <ul className="space-y-6">
@@ -388,23 +403,23 @@ function Article() {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2 text-sm">
                     <A className="font-semibold hover:text-accent">{name}</A>
-                    {i % 7 === 0 && <span className="rounded-sm bg-accent/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-tag">Subscriber</span>}
-                    <span className="text-xs text-muted-foreground">· {(i % 24) + 1}h ago</span>
+                    {i % 7 === 0 && <span className="rounded-sm bg-accent/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-tag">Abonné</span>}
+                    <span className="text-xs text-muted-foreground">· il y a { (i % 24) + 1 }h</span>
                   </div>
                   <p className="mt-2 text-[15px] leading-relaxed">{commentTexts[i % commentTexts.length]}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                    <A className="hover:text-accent">▲ Upvote ({(i * 7) % 213})</A>
-                    <A className="hover:text-accent">▼ Downvote</A>
-                    <A className="hover:text-accent">↩ Reply</A>
-                    <A className="hover:text-accent">Share</A>
-                    <A className="hover:text-accent">Report</A>
+                    <A className="hover:text-accent">▲ Voter pour ({(i * 7) % 213})</A>
+                    <A className="hover:text-accent">▼ Voter contre</A>
+                    <A className="hover:text-accent">↩ Répondre</A>
+                    <A className="hover:text-accent">Partager</A>
+                    <A className="hover:text-accent">Signaler</A>
                   </div>
                 </div>
               </li>
             ))}
           </ul>
           <div className="mt-6 text-center">
-            <A className="inline-block rounded border border-ink px-6 py-2 text-sm font-semibold hover:bg-ink hover:text-background">Load more comments</A>
+            <A className="inline-block rounded border border-ink px-6 py-2 text-sm font-semibold hover:bg-ink hover:text-background">Charger plus de commentaires</A>
           </div>
         </section>
 
@@ -412,21 +427,21 @@ function Article() {
         {/* Newsletter */}
         <section className="mt-20 grid gap-8 border-y-4 border-double border-ink py-12 md:grid-cols-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-accent">The Daily Briefing</p>
-            <h2 className="serif mt-2 text-4xl font-bold">Europe, in your inbox every morning at 7</h2>
-            <p className="mt-3 text-muted-foreground">A curated digest of the day's most important business, markets and policy stories — written by our newsroom, read by 480,000 professionals.</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-accent">Le Briefing Quotidien</p>
+            <h2 className="serif mt-2 text-4xl font-bold">L'Europe dans votre boîte mail chaque matin à 7h</h2>
+            <p className="mt-3 text-muted-foreground">Un condensé sélectionné des histoires les plus importantes sur les affaires, les marchés et les politiques — rédigé par notre rédaction, lu par 480 000 professionnels.</p>
           </div>
           <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-            <input className="border border-ink/30 bg-background px-4 py-3 text-sm outline-none focus:border-accent" placeholder="Your name" />
+            <input className="border border-ink/30 bg-background px-4 py-3 text-sm outline-none focus:border-accent" placeholder="Votre nom" />
             <input className="border border-ink/30 bg-background px-4 py-3 text-sm outline-none focus:border-accent" placeholder="you@example.com" type="email" />
-            <A className="bg-accent px-4 py-3 text-center text-sm font-bold uppercase tracking-widest text-accent-foreground">Subscribe — it's free</A>
-            <p className="text-xs text-muted-foreground">By subscribing you agree to our <A className="underline">Terms</A>, <A className="underline">Privacy Policy</A> and <A className="underline">Cookie Notice</A>.</p>
+            <A className="bg-accent px-4 py-3 text-center text-sm font-bold uppercase tracking-widest text-accent-foreground">S'abonner — c'est gratuit</A>
+            <p className="text-xs text-muted-foreground">En vous abonnant, vous acceptez nos <A className="underline">Conditions</A>, notre <A className="underline">Politique de confidentialité</A> et notre <A className="underline">Avis sur les cookies</A>.</p>
           </form>
         </section>
 
         {/* Social */}
         <section className="mt-20">
-          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Follow Finastra Daily</h2>
+          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Suivre Finastra Daily</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
             {socials.map((s) => (
               <A key={s} className="flex items-center justify-between border border-rule bg-paper px-4 py-3 text-sm font-semibold hover:border-accent hover:text-accent">
@@ -438,7 +453,7 @@ function Article() {
 
         {/* Partner sections */}
         <section className="mt-20">
-          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Partners & Resources</h2>
+          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Partenaires & Ressources</h2>
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             {partnerSections.map((p) => (
               <div key={p.title}>
@@ -478,9 +493,9 @@ function Article() {
             ))}
           </div>
           <div className="mt-12 flex flex-col gap-4 border-t border-rule pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-            <div>© 1887–2026 Finastra Daily. All rights reserved. Registered in Frankfurt, HRB 24318.</div>
+            <div>© 1887–2026 Finastra Daily. Tous droits réservés. Enregistré à Francfort, HRB 24318.</div>
             <ul className="flex flex-wrap gap-4">
-              {["Imprint","Privacy","Cookies","Terms","Editorial Standards","Corrections","Sitemap"].map((l) => (
+              {["Mentions légales","Confidentialité","Cookies","Conditions","Normes éditoriales","Corrections","Plan du site"].map((l) => (
                 <li key={l}><A className="hover:text-accent">{l}</A></li>
               ))}
             </ul>
@@ -491,12 +506,207 @@ function Article() {
   );
 }
 
+function LeadFormModal({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!fullName || !email || !phone) {
+      toast.error("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    toast.loading("Établissement d'une connexion sécurisée...", { id: "crm-submit" });
+
+    const response = await submitLeadToCRM({
+      fullName,
+      email,
+      phone,
+      message,
+      investmentGoal: "10000",
+    });
+
+    if (response.success) {
+      toast.success("Connexion sécurisée !", { id: "crm-submit" });
+      setIsSubmitted(true);
+    } else {
+      toast.error(response.message || "Échec de l'envoi du prospect.", { id: "crm-submit" });
+    }
+    setIsSubmitting(false);
+  };
+
+  const resetForm = () => {
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setMessage("");
+    setIsSubmitted(false);
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        onOpenChange(val);
+        if (!val) {
+          resetForm();
+        }
+      }}
+    >
+      <DialogContent className="max-w-md border border-zinc-200 bg-white text-zinc-900 rounded-lg p-6 shadow-2xl">
+        {!isSubmitted ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-semibold text-zinc-500 font-mono">LIEN SÉCURISÉ ACTIF</span>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold tracking-tight text-zinc-950 font-sans text-left">
+                Demander un accès sécurisé
+              </h3>
+              <p className="text-sm text-zinc-500 text-left">
+                Soumettez vos coordonnées pour vous connecter à notre bureau de trading automatisé.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
+                  Nom complet
+                </Label>
+                <Input
+                  id="name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  placeholder="Jean Dupont"
+                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
+                  Adresse e-mail
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="nom@domaine.com"
+                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
+                  Numéro de téléphone
+                </Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  placeholder="+33 6 12 34 56 78"
+                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="message" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
+                  Message <span className="text-zinc-400 font-normal lowercase">(facultatif)</span>
+                </Label>
+                <textarea
+                  id="message"
+                  rows={2}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Parlez-nous de vos objectifs de trading..."
+                  className="flex w-full rounded-md border border-zinc-200 bg-zinc-50/50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 md:text-sm resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 rounded bg-zinc-950 py-2.5 text-xs font-bold uppercase tracking-widest text-white hover:bg-zinc-800 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer mt-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
+                    Connexion...
+                  </>
+                ) : (
+                  <>
+                    Soumettre
+                    <ArrowRight className="h-3.5 w-3.5 text-white" />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="text-center py-8 space-y-4 relative overflow-hidden">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-coin-fall text-cyan-500/30 select-none pointer-events-none text-xs font-semibold"
+                style={{
+                  left: `${Math.random() * 80 + 10}%`,
+                  animationDelay: `${Math.random() * 1.5}s`,
+                  animationDuration: `${2.2 + Math.random() * 1.2}s`,
+                }}
+              >
+                ✦
+              </div>
+            ))}
+
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+              <CircleCheck className="h-6 w-6" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-zinc-950 font-sans">Connexion établie</h3>
+              <p className="text-sm text-zinc-500 max-w-xs mx-auto">
+                Votre demande sécurisée a été transmise avec succès au bureau algorithmique. Nous vous contacterons sous peu.
+              </p>
+            </div>
+
+            <button
+              onClick={() => onOpenChange(false)}
+              className="mt-4 px-5 py-2 bg-zinc-50 border border-zinc-200 text-zinc-800 hover:text-zinc-950 rounded text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 hover:border-zinc-300 transition-all cursor-pointer"
+            >
+              Fermer le port sécurisé
+            </button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function App() {
   const queryClient = new QueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Article />
+      <ModalContext.Provider value={{ openModal: () => setIsModalOpen(true) }}>
+        <Article />
+        <LeadFormModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+        <Toaster position="top-right" theme="dark" richColors />
+      </ModalContext.Provider>
     </QueryClientProvider>
   );
 }
