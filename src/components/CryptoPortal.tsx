@@ -59,24 +59,28 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-zinc-800 selection:text-white">
       {/* Header */}
       <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-4">
+        <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-4 gap-2">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-zinc-100 transition-colors uppercase tracking-wider cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-zinc-100 transition-colors uppercase tracking-wider cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Retour à l'accueil
+            <span className="hidden sm:inline">Retour à l'accueil</span>
+            <span className="inline sm:hidden">Retour</span>
           </button>
           
-          <div className="flex items-center gap-2">
-            <span className="serif text-xl font-black tracking-tight text-white">Finastra Daily</span>
-            <span className="h-4 w-px bg-zinc-800" />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-medium hidden sm:inline">Portail Trading</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="serif text-lg sm:text-xl font-black tracking-tight text-white">Finastra Daily</span>
+            <span className="h-4 w-px bg-zinc-800 hidden sm:inline" />
+            <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-medium hidden md:inline">Portail Trading</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-zinc-900 border border-zinc-800 px-2 sm:px-2.5 py-1 rounded-full text-[8px] sm:text-[9px]">
             <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-            <span className="text-[9px] font-bold text-white font-mono tracking-widest uppercase">PORT SECURE ACTIF</span>
+            <span className="font-bold text-white font-mono tracking-widest uppercase">
+              <span className="hidden sm:inline">PORT SECURE ACTIF</span>
+              <span className="inline sm:hidden">SÉCURISÉ</span>
+            </span>
           </div>
         </div>
       </header>
@@ -240,7 +244,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 </span>
               </div>
 
-              <h1 className="serif text-4xl font-black leading-[1.15] text-white md:text-5xl lg:text-6xl">
+              <h1 className="serif text-3xl sm:text-4xl font-black leading-[1.15] text-white md:text-5xl lg:text-6xl">
                 Bureau Quantitatif de Trading Crypto & IA.
               </h1>
               
@@ -294,7 +298,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
           <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Flux en Direct</div>
-              <h2 className="serif text-3xl font-bold text-white mt-1">Données Techniques du Pool Algorithmique</h2>
+              <h2 className="serif text-2xl sm:text-3xl font-bold text-white mt-1">Données Techniques du Pool Algorithmique</h2>
             </div>
             <div className="text-zinc-500 text-xs font-mono">
               Mis à jour : En direct de Francfort · Flux SSL Activé
@@ -307,7 +311,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 <span className="text-sm font-semibold text-zinc-300">Bitcoin / EUR</span>
                 <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+4.12%</span>
               </div>
-              <div className="text-3xl font-bold font-mono text-white">58,740.00 €</div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-white">58,740.00 €</div>
               <div className="text-xs text-zinc-500">Moyenne pondérée du carnet d'ordres globale</div>
             </div>
 
@@ -316,7 +320,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 <span className="text-sm font-semibold text-zinc-300">Ethereum / EUR</span>
                 <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+3.28%</span>
               </div>
-              <div className="text-3xl font-bold font-mono text-white">3,145.50 €</div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-white">3,145.50 €</div>
               <div className="text-xs text-zinc-500">Flux d'exécution de gaz intelligent optimisé</div>
             </div>
 
@@ -325,7 +329,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                 <span className="text-sm font-semibold text-zinc-300">Solana / EUR</span>
                 <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+8.65%</span>
               </div>
-              <div className="text-3xl font-bold font-mono text-white">142.10 €</div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-white">142.10 €</div>
               <div className="text-xs text-zinc-500">Fréquence de routage ultra-rapide active</div>
             </div>
           </div>
@@ -337,7 +341,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="mb-12 text-center max-w-2xl mx-auto space-y-2">
             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Recherche et Analyses</span>
-            <h2 className="serif text-3xl font-black text-white md:text-4xl">Notes du Bureau Quantitatif</h2>
+            <h2 className="serif text-2xl sm:text-3xl md:text-4xl font-black text-white">Notes du Bureau Quantitatif</h2>
             <p className="text-zinc-500 text-sm font-light">
               Des rapports approfondis rédigés par nos analystes financiers et nos ingénieurs système sur l'avenir de l'automatisation.
             </p>
@@ -415,7 +419,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       {/* Technical FAQ / Platform Info */}
       <section className="py-20 bg-zinc-950 border-b border-zinc-900">
         <div className="mx-auto max-w-[900px] px-4 space-y-12 text-left">
-          <h2 className="serif text-3xl font-bold text-white text-center">Spécifications du Système</h2>
+          <h2 className="serif text-2xl sm:text-3xl font-bold text-white text-center">Spécifications du Système</h2>
           
           <div className="grid gap-8 sm:grid-cols-2">
             <div className="space-y-2">
