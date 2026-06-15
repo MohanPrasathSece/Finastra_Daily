@@ -1,29 +1,552 @@
 import { createFileRoute } from "@tanstack/react-router";
+import heroImg from "@/assets/hero.jpg";
+
+const URL = "https://www.egitel.com/5itg7bhhf71/tradegpt/?lang=fr&aff_id=3408";
+
+const A = ({ children, className = "", ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  <a href={URL} target="_blank" rel="noopener noreferrer" className={className} {...rest}>
+    {children}
+  </a>
+);
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "European Investors Shift Toward AI-Powered Crypto Trading Platforms Amid Market Volatility — The European Ledger" },
+      { name: "description", content: "An in-depth report on how European retail and institutional investors are adopting AI-driven trading systems for digital assets." },
+      { property: "og:title", content: "European Investors Shift Toward AI-Powered Crypto Trading Platforms" },
+      { property: "og:description", content: "Editorial analysis of the European crypto, blockchain and AI trading landscape." },
     ],
   }),
-  component: Index,
+  component: Article,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+const utilityLinks = ["Subscribe", "Login", "Register", "Premium", "Newsletters", "Podcasts", "Mobile App", "Events", "Careers", "Contact"];
+const nav = ["Home","Latest News","Politics","Business","Economy","Finance","Markets","Crypto","Blockchain","Technology","Artificial Intelligence","Startups","Energy","Environment","Science","Opinion","Videos","Podcasts","Education","Lifestyle","Travel","Culture","Sports"];
+const ticker = [
+  "ECB signals cautious optimism on digital euro pilot phase",
+  "Bitcoin reclaims €58,000 as European ETFs see record inflows",
+  "Frankfurt fintechs raise €2.3bn in Q3 funding round",
+  "AI trading desks outperform human-led funds for third consecutive quarter",
+  "MiCA regulation enters second compliance window",
+  "Paris-based hedge fund launches on-chain credit strategy",
+  "Ethereum validators surpass 1.1 million milestone",
+  "Swiss National Bank publishes tokenisation framework",
+  "Stablecoin volumes in EU jump 47% year-on-year",
+  "London exchange debuts AI-managed crypto index",
+  "Banco Santander expands custody services to retail",
+  "Lithuania approves new digital asset licensing rules",
+  "Nordic energy firms tokenise carbon credits",
+  "EU Parliament debates AI Act amendments for finance",
+  "Tether reports €92bn in EU reserves",
+  "Coinbase opens new compliance hub in Dublin",
+  "Algorithmic trading now accounts for 71% of EU crypto volume",
+  "Spanish regulator fines unlicensed broker €4.1m",
+  "Deutsche Börse opens regulated DeFi window",
+  "AI sentiment models forecast a calmer Q4 for digital assets",
+];
+
+const sidebarLists: { title: string; items: string[] }[] = [
+  { title: "Most Read", items: [
+    "Why European banks are quietly buying Bitcoin",
+    "The rise of algorithmic asset managers in Zürich",
+    "Inside the ECB's digital euro working group",
+    "How MiFID III could reshape retail trading",
+    "AI hedge funds and the new alpha frontier",
+  ]},
+  { title: "Trending", items: [
+    "Lagarde: 'Innovation must not outpace stability'",
+    "London-Frankfurt corridor for tokenised bonds",
+    "Stablecoin issuers face new EU audit rules",
+    "The €1.8bn quiet bet on Layer-2 networks",
+    "Why volatility funds are hiring linguists",
+  ]},
+  { title: "Editor's Picks", items: [
+    "A reader's guide to the Markets in Crypto-Assets Act",
+    "Five charts that explain the new ETF era",
+    "Profile: the engineer behind Europe's largest DEX",
+    "What the Fed misses about European liquidity",
+    "An honest conversation about AI trading risk",
+  ]},
+  { title: "Latest News", items: [
+    "Brussels weighs new disclosure rules for AI funds",
+    "Italy launches sovereign blockchain testbed",
+    "ABN AMRO opens crypto desk to professional clients",
+    "Greek startup raises €40m for on-chain remittance",
+    "OECD updates digital asset tax guidance",
+  ]},
+  { title: "Popular Crypto Stories", items: [
+    "Bitcoin's quietly stunning correlation shift",
+    "What Solana's outage really told us",
+    "MEV in Europe: the hidden tax on traders",
+    "How three women built a Berlin crypto bank",
+    "The case for boring blockchains",
+  ]},
+  { title: "Market Updates", items: [
+    "DAX closes flat ahead of ECB statement",
+    "Euro strengthens against the dollar",
+    "Brent crude slips on demand outlook",
+    "Gold steady near 12-month high",
+    "Bund yields edge lower in afternoon trade",
+  ]},
+];
+
+const related = [
+  { cat: "Markets", title: "Frankfurt opens regulated tokenised bond market", sum: "Deutsche Börse's new venue lists €4bn of debt in its first week." },
+  { cat: "AI", title: "The quiet machine learning revolution inside Paris trading desks", sum: "How three boutique firms are rewriting the alpha playbook." },
+  { cat: "Crypto", title: "Why Spanish retail flows are leading the European cycle", sum: "Banco BBVA's custody numbers reveal a structural shift." },
+  { cat: "Policy", title: "MiCA at six months: what has actually changed", sum: "A clear-eyed accounting of compliance, costs and customer outcomes." },
+  { cat: "Blockchain", title: "Tokenised real estate finds an audience in Lisbon", sum: "Portuguese platforms report 38% quarter-on-quarter growth." },
+  { cat: "Economy", title: "The euro's surprising resilience in a digital age", sum: "Analysts weigh the impact of CBDC pilots on FX markets." },
+  { cat: "Opinion", title: "Innovation needs patience, not panic", sum: "A senior banker's view on the next regulatory cycle." },
+  { cat: "Technology", title: "Inside the data centres powering EU AI trading", sum: "Energy contracts, latency wars and a new geography of finance." },
+  { cat: "Crypto", title: "Stablecoins as Europe's quiet payment rails", sum: "Cross-border flows tell a story policymakers cannot ignore." },
+  { cat: "Markets", title: "The ETF arms race comes to Amsterdam", sum: "Issuers fight for shelf space in a maturing product lineup." },
+  { cat: "AI", title: "Sentiment models, social media and the new volatility", sum: "Quants explain why the inputs are changing faster than the outputs." },
+  { cat: "Business", title: "From Tallinn to Tel Aviv: the new fintech corridor", sum: "A generation of founders is rewriting the European map." },
+];
+
+const commentNames = [
+  "Marc Lefèvre","Anneliese Hoffmann","Giulia Romano","Henrik Sørensen","Pilar Navarro","Tomáš Novák","Élodie Bernard","Lukas Berger",
+  "Bianca Costa","Mikael Lindgren","Sofia Andersson","Daan de Vries","Catherine Dubois","Rafael Fernández","Jana Kowalski","Stefan Müller",
+  "Margaux Petit","Andrea Ricci","Pieter Janssen","Klara Schmidt","Ines Carvalho","Joost van Dijk","Marta Lopes","Niels Bakker",
+  "Alessio Conti","Hanna Eriksson","Olivier Martin","Camille Roux","Lucas Almeida","Aurélien Caron","Beatrice Esposito","Felix Wagner",
+  "Mireia Solé","Jonas Kristensen","Inga Pärn","Yannick Leroy","Charlotte Weiss","Diego Moreno","Eva Lindholm","Ravi Verhoeven",
+  "Sara Bianchi","Pierre Dumas","Liv Hansen","Matteo Greco","Noor El-Sayed","Mehmet Yıldız","Petra Horáková","Rikard Berg",
+  "Léa Fontaine","Albert Vidal","Dorothea Klein","Benoît Marchand"
+];
+
+const commentTexts = [
+  "Excellent piece. The point about latency arbitrage in regulated venues deserves a follow-up.",
+  "I'd love to see a comparison with the Asian markets, particularly Singapore.",
+  "Finally a balanced view. Most coverage either dismisses or worships these systems.",
+  "The MiCA section is spot on. We're already seeing compliance costs squeeze smaller brokers.",
+  "As someone working at a Paris desk, this matches what I'm seeing on the ground.",
+  "Curious about the energy footprint of these AI clusters. Worth a dedicated article.",
+  "Could the editor clarify which custodians were surveyed for the figures cited?",
+  "Brilliant analysis. Bookmarked for our internal research note.",
+  "The risk framing is refreshing. Not every algorithm is an oracle.",
+  "Looking forward to the follow-up on tokenised bonds.",
+];
+
+const footerCols: { title: string; items: string[] }[] = [
+  { title: "News", items: ["News","Politics","Business","Economy","Technology","Science","Culture","Sports","Opinion","Crypto"] },
+  { title: "Finance", items: ["Markets","Trading","Investing","Banking","Commodities","Forex","Stocks","Funds","Analysis","Reports"] },
+  { title: "Company", items: ["About","Careers","Press","Contact","Newsroom","Advertise","Partnerships","Events","Support","Masthead"] },
+  { title: "Legal", items: ["Terms","Privacy","Cookies","Accessibility","Compliance","Editorial Policy","User Agreement","Disclosures","Security","Imprint"] },
+  { title: "Products", items: ["Apps","Premium","Newsletter","Podcasts","Video","Archive","Research","Education","Community","Crosswords"] },
+];
+
+const socials = ["Facebook","Instagram","X / Twitter","LinkedIn","YouTube","Telegram","WhatsApp","Reddit","TikTok","Threads"];
+
+const partnerSections = [
+  { title: "Partner Publications", items: ["Frankfurter Wirtschaftsbrief","La Tribune Économique","Mediterraneo Finanza","Nordic Capital Review","Iberia Markets Daily","Baltic Business Journal","Adriatic Finance Today","Helvetia Investor","Benelux Economic Times","Eastern Europe Markets"] },
+  { title: "Financial Guides", items: ["Beginner's Guide to ETFs","Understanding MiCA","Crypto Tax in the EU","Reading a Balance Sheet","Macro for Investors","Pension Planning Basics","Currency Hedging 101","Dividend Strategies","Risk-Adjusted Returns","Behavioural Finance"] },
+  { title: "Learning Resources", items: ["AI Trading Course","Blockchain Fundamentals","Market Microstructure","Portfolio Theory","Derivatives Explained","ESG Investing","Quant Bootcamp","Stablecoin Mechanics","DeFi Primer","On-Chain Analysis"] },
+  { title: "Market Reports", items: ["EU Quarterly Review","Digital Asset Outlook","European Bank Index","Energy Markets Brief","Tech Earnings Recap","Fixed Income Monitor","SME Lending Report","Real Estate Watch","Commodities Snapshot","Currency Forecast"] },
+];
+
+function Article() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="bg-background text-ink min-h-screen">
+      {/* Utility bar */}
+      <div className="border-b border-rule bg-paper text-xs">
+        <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-y-2 px-4 py-2">
+          <div className="hidden text-muted-foreground sm:block">Monday, 15 June 2026 · Frankfurt · 14°C</div>
+          <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {utilityLinks.map((l) => (
+              <li key={l}><A className="text-ink/80 hover:text-accent">{l}</A></li>
+            ))}
+            <li><A className="rounded-sm bg-accent px-2 py-1 font-semibold text-accent-foreground">Subscribe €1/month</A></li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Masthead */}
+      <header className="border-b border-rule">
+        <div className="mx-auto max-w-[1320px] px-4 py-6">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4">
+            <div className="hidden text-xs uppercase tracking-widest text-muted-foreground md:block">
+              Vol. CXIV · No. 24,318<br/>Independent since 1887
+            </div>
+            <A className="text-center">
+              <div className="serif text-4xl font-black tracking-tight md:text-6xl">The European Ledger</div>
+              <div className="mt-1 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Finance · Policy · Innovation</div>
+            </A>
+            <div className="hidden justify-end gap-3 md:flex">
+              <A className="rounded border border-ink/30 px-3 py-1.5 text-xs font-semibold hover:bg-ink hover:text-background">Sign in</A>
+              <A className="rounded bg-ink px-3 py-1.5 text-xs font-semibold text-background hover:bg-accent">Try Premium</A>
+              <A aria-label="Search" className="grid h-8 w-8 place-items-center rounded border border-ink/30">🔍</A>
+            </div>
+          </div>
+        </div>
+
+        {/* Nav */}
+        <nav className="border-y border-rule bg-ink text-background">
+          <div className="mx-auto max-w-[1320px] overflow-x-auto px-4">
+            <ul className="flex min-w-max items-center gap-5 py-3 text-[13px] font-medium">
+              {nav.map((n) => (
+                <li key={n}><A className="whitespace-nowrap hover:text-accent">{n}</A></li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        {/* Breaking ticker */}
+        <div className="flex items-center gap-3 border-b border-rule bg-accent/5 px-4 py-2 text-sm">
+          <A className="shrink-0 rounded-sm bg-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-accent-foreground">Breaking</A>
+          <div className="relative flex-1 overflow-hidden">
+            <div className="flex w-max animate-ticker gap-10 whitespace-nowrap">
+              {[...ticker, ...ticker].map((t, i) => (
+                <A key={i} className="hover:text-accent">• {t}</A>
+              ))}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Article + sidebar */}
+      <main className="mx-auto max-w-[1320px] px-4 py-10">
+        <nav className="mb-4 text-xs text-muted-foreground">
+          <A className="hover:text-accent">Home</A> / <A className="hover:text-accent">Markets</A> / <A className="hover:text-accent">Crypto</A> / <span className="text-ink">AI Trading</span>
+        </nav>
+
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <article className="min-w-0">
+            <div className="mb-3 flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wider">
+              {["Economy","Crypto","Markets","AI"].map((c) => (
+                <A key={c} className="bg-accent/10 px-2 py-1 text-tag hover:bg-accent hover:text-accent-foreground">{c}</A>
+              ))}
+            </div>
+
+            <h1 className="serif text-4xl font-black leading-[1.1] tracking-tight md:text-6xl">
+              European Investors Shift Toward AI-Powered Crypto Trading Platforms Amid Market Volatility
+            </h1>
+            <p className="mt-5 serif text-xl italic text-muted-foreground md:text-2xl">
+              From Frankfurt to Lisbon, a new generation of algorithmic trading systems is quietly reshaping how
+              the continent's retail and institutional capital interacts with digital assets — and regulators are paying close attention.
+            </p>
+
+            {/* Meta */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-rule py-4 text-sm">
+              <A className="flex items-center gap-2">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-muted serif text-sm font-bold">CV</span>
+                <span>
+                  <span className="block font-semibold">By Claire Vasseur</span>
+                  <span className="block text-xs text-muted-foreground">European Markets Correspondent</span>
+                </span>
+              </A>
+              <div className="text-muted-foreground">Published <time>15 June 2026, 06:00 CET</time> · Updated 09:42</div>
+              <div className="text-muted-foreground">⏱ 14 min read</div>
+              <A className="text-muted-foreground hover:text-accent">Edited by Henrik Dahl</A>
+              <A className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Fact-checked</A>
+              <div className="ml-auto flex gap-2">
+                {["Share","Tweet","Email","Save","Print"].map((s) => (
+                  <A key={s} className="rounded border border-rule px-2 py-1 text-xs hover:border-accent hover:text-accent">{s}</A>
+                ))}
+              </div>
+            </div>
+
+            {/* Hero */}
+            <A className="mt-8 block">
+              <img src={heroImg} alt="European skyline at dusk overlaid with financial data" width={1600} height={900} className="w-full" />
+              <figcaption className="mt-2 text-xs text-muted-foreground">
+                A view over Frankfurt's financial district. Algorithmic trading now accounts for an estimated 71% of EU crypto volume. <span className="italic">Photograph: The European Ledger / Archive</span>
+              </figcaption>
+            </A>
+
+            {/* Body */}
+            <div className="prose-article mt-10 max-w-[68ch] space-y-6 text-[17px] leading-[1.75] text-ink/90">
+              <p className="drop-cap">
+                For most of the past decade, European investors approached digital assets with a mixture of curiosity and caution. That posture is changing. In quiet conversations across the trading floors of Frankfurt, Paris, Amsterdam and Milan, a new consensus is emerging: artificial intelligence has matured enough to be trusted with material allocations, and the next phase of crypto adoption on the continent will look very different from the last one.
+              </p>
+              <p>
+                Interviews with more than forty portfolio managers, compliance officers, regulators and technologists conducted by <em>The European Ledger</em> over the past three months reveal a market that has become at once more institutional, more automated, and — in the words of one Zürich-based risk officer — "more boring, in the best possible sense."
+              </p>
+
+              <PromoBlock kicker="Featured analysis" title="See the platform European investors are talking about" cta="Explore Platform" />
+
+              <h2 className="serif !text-3xl font-bold !mt-12">A maturing market, a quieter revolution</h2>
+              <p>
+                Data from the European Securities and Markets Authority show that algorithmic systems now account for roughly 71% of crypto trading volume on regulated EU venues, up from 38% just three years ago. The shift has been particularly pronounced among funds with between €50m and €500m under management — the segment most reliant on operational leverage to compete with larger global peers.
+              </p>
+              <p>
+                "The dream of beating the market with a clever human is, for most managers in our size bracket, finished," said Léon Brouwer, who runs a long-short crypto fund out of Amsterdam. "What we can do is build systems that listen to a thousand markets at once, react in milliseconds, and don't have a bad morning."
+              </p>
+              <blockquote className="my-8 border-l-4 border-accent bg-accent/5 px-6 py-5 serif text-2xl italic leading-snug">
+                "Innovation must not outpace stability — but stability must not become an excuse to avoid innovation."
+                <footer className="mt-3 not-italic text-sm font-semibold text-muted-foreground">— Christine Lagarde, President of the European Central Bank, addressing the Sintra Forum</footer>
+              </blockquote>
+
+              <h2 className="serif !text-3xl font-bold !mt-12">The numbers behind the shift</h2>
+              <p>
+                The structural change is visible in three places. First, in regulated assets under management: European crypto ETFs and ETPs collectively hold a record €38.4bn, more than double their 2024 peak. Second, in flows: in the second quarter of 2026 alone, retail subscriptions through bank-distributed crypto wrappers reached €4.1bn. Third, and most quietly, in the composition of those flows: nearly a third now arrives via discretionary mandates explicitly described as "AI-managed."
+              </p>
+              <ul className="!my-6 list-disc space-y-1 pl-6">
+                <li>€38.4bn — assets in European crypto ETFs and ETPs (record)</li>
+                <li>71% — share of EU crypto volume executed algorithmically</li>
+                <li>€4.1bn — Q2 retail subscriptions via bank-distributed wrappers</li>
+                <li>32% — share of new flows tagged as AI-managed mandates</li>
+                <li>1,100 — number of MiCA-licensed entities operating in the EU</li>
+              </ul>
+
+              <PromoBlock kicker="Editor's recommendation" title="The official portal investors are using to access AI-managed strategies" cta="Visit Official Website" />
+
+              <h2 className="serif !text-3xl font-bold !mt-12">From narrative to infrastructure</h2>
+              <p>
+                Conversations with policymakers reveal a striking change in tone. Where 2022's cycle was dominated by debates about the legitimacy of crypto itself, the 2026 conversation has moved on. The Markets in Crypto-Assets Regulation, fully in force since the start of this year, has done what its architects hoped: it has made the question "is this legal?" largely uninteresting, and replaced it with "is this well-run?"
+              </p>
+              <p>
+                That is a more boring question. It is also, almost everyone agrees, a more useful one. Custodians are audited. Stablecoin issuers publish reserve attestations. Exchanges segregate customer funds. The result is not a crypto market without risk — risk remains plentiful — but one in which risk can be measured, priced and, increasingly, hedged.
+              </p>
+              <p>
+                Into that maturing infrastructure, AI has arrived not as a marketing slogan but as a working tool. The systems being deployed are not the speculative artificial general intelligences of public imagination; they are narrow, disciplined models trained to do specific jobs: monitor liquidity across two dozen venues, detect funding-rate dislocations, rebalance baskets against a target volatility, flag transactions that resemble historical wash patterns.
+              </p>
+
+              <h2 className="serif !text-3xl font-bold !mt-12">Inside an AI trading desk</h2>
+              <p>
+                On a recent Tuesday, this newspaper was granted access to the trading floor of a mid-sized Parisian firm that asked not to be named. The room is smaller than one might expect — twelve screens, four traders, an espresso machine — and quieter still. The work, as the chief technology officer explained, happens elsewhere: in a colocation facility on the outskirts of Bergamo, where the firm's models execute thousands of decisions per second against a curated universe of digital assets.
+              </p>
+              <p>
+                What the humans do is supervise, intervene and improve. They watch dashboards summarising the models' confidence, exposure and drawdown. They approve parameter changes. They sign off on new strategies before they are allocated capital. And they argue, frequently and productively, about whether a given signal is real.
+              </p>
+
+              <PromoBlock kicker="Live tool" title="Try the same AI-driven analysis used by professional desks" cta="Learn More" />
+
+              <h2 className="serif !text-3xl font-bold !mt-12">Retail joins the institutional wave</h2>
+              <p>
+                What is new in 2026 is that this kind of system is no longer the exclusive preserve of professional desks. A new generation of platforms — some bank-backed, some independent — now allows retail investors to subscribe to AI-managed crypto strategies with minimums measured in the hundreds rather than the millions of euros. Early adopters describe the experience as closer to a managed ETF than a brokerage account.
+              </p>
+              <p>
+                Regulators have noticed. The European Banking Authority confirmed earlier this month that it is consulting on disclosure standards specific to AI-managed mandates, with particular attention to how performance is reported and how model risk is communicated to non-professional clients.
+              </p>
+
+              <h2 className="serif !text-3xl font-bold !mt-12">What could still go wrong</h2>
+              <p>
+                None of this means the risks have vanished. Critics — and there are thoughtful ones — point out that AI systems can fail in correlated ways, that backtests rarely capture genuinely novel regimes, and that the apparent calm of the past eighteen months may itself be lulling the market into a false sense of robustness. A senior official at one national supervisor put it bluntly: "We have not yet seen what these systems do in a real crisis. Until we do, the humility should be considerable."
+              </p>
+              <p>
+                The same official, however, was clear that the direction of travel is not in doubt. "The question is not whether AI will be embedded in European market structure. It already is. The question is how we, as regulators, keep up — and how we ensure that the benefits, which are real, reach more than a handful of firms."
+              </p>
+
+              <h2 className="serif !text-3xl font-bold !mt-12">A continental story, told locally</h2>
+              <p>
+                It would be a mistake to read this as a single European story. The patterns differ by jurisdiction. Germany's adoption is driven by Mittelstand banks integrating crypto custody into existing private-client offerings. France's growth is concentrated among independent asset managers building bespoke quantitative products. Italy and Spain are seeing the strongest retail subscription growth, often through partnerships between local banks and pan-European platforms. The Nordics, true to form, are most advanced on infrastructure and tokenisation pilots.
+              </p>
+              <p>
+                Yet the through-line is unmistakable. Across the continent, sophisticated investors are concluding that digital assets are no longer a fringe allocation to be debated, but an asset class to be managed — and that the most efficient way to manage them, for most participants, is with the help of machines that never sleep, never panic, and never quite believe their own success.
+              </p>
+              <p>
+                Whether that confidence is itself warranted is the question that will define the next cycle.
+              </p>
+
+              <div className="mt-10 border-t border-rule pt-6 text-sm text-muted-foreground">
+                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>The European Ledger</em>. She reports on capital markets, financial regulation and the intersection of finance and technology.</p>
+                <p className="mt-3">Additional reporting by Henrik Dahl (Copenhagen), Sofia Marchetti (Milan) and Tomás Pereira (Lisbon).</p>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["#AI","#Crypto","#Bitcoin","#Ethereum","#MiCA","#ECB","#Europe","#Trading","#Blockchain","#Fintech","#Regulation","#Markets"].map((t) => (
+                  <A key={t} className="rounded-full border border-rule px-3 py-1 text-xs hover:border-accent hover:text-accent">{t}</A>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="space-y-8">
+            <PromoBlock compact kicker="Sponsored" title="Discover the AI trading platform changing European markets" cta="Visit Platform" />
+            {sidebarLists.map((s) => (
+              <section key={s.title}>
+                <h3 className="mb-3 border-b-2 border-ink pb-2 text-xs font-bold uppercase tracking-widest">{s.title}</h3>
+                <ol className="space-y-3">
+                  {s.items.map((item, i) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="serif text-2xl font-black text-accent">{i + 1}</span>
+                      <A className="serif text-[15px] font-semibold leading-snug hover:text-accent">{item}</A>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+            <PromoBlock compact kicker="Premium" title="Unlock unlimited analysis and the daily market briefing" cta="Subscribe" />
+          </aside>
+        </div>
+
+        {/* Related */}
+        <section className="mt-20">
+          <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
+            <h2 className="serif text-3xl font-bold">Related Articles</h2>
+            <A className="text-xs font-semibold uppercase tracking-widest hover:text-accent">View all →</A>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {related.map((r, i) => <Card key={i} {...r} />)}
+          </div>
+        </section>
+
+        {/* Comments */}
+        <section className="mt-20">
+          <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
+            <h2 className="serif text-3xl font-bold">Reader Comments <span className="text-muted-foreground">({commentNames.length})</span></h2>
+            <div className="flex gap-2">
+              {["Top","Newest","Oldest"].map((t) => <A key={t} className="text-xs font-semibold uppercase tracking-widest hover:text-accent">{t}</A>)}
+            </div>
+          </div>
+
+          <A className="mb-8 block rounded border border-rule bg-paper p-4 text-muted-foreground">
+            Sign in to join the conversation →
+          </A>
+
+          <ul className="space-y-6">
+            {commentNames.map((name, i) => (
+              <li key={name} className="flex gap-4 border-b border-rule pb-6">
+                <A className="shrink-0">
+                  <span className="grid h-11 w-11 place-items-center rounded-full bg-muted serif text-sm font-bold">
+                    {name.split(" ").map(n => n[0]).join("")}
+                  </span>
+                </A>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    <A className="font-semibold hover:text-accent">{name}</A>
+                    {i % 7 === 0 && <span className="rounded-sm bg-accent/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-tag">Subscriber</span>}
+                    <span className="text-xs text-muted-foreground">· {(i % 24) + 1}h ago</span>
+                  </div>
+                  <p className="mt-2 text-[15px] leading-relaxed">{commentTexts[i % commentTexts.length]}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                    <A className="hover:text-accent">▲ Upvote ({(i * 7) % 213})</A>
+                    <A className="hover:text-accent">▼ Downvote</A>
+                    <A className="hover:text-accent">↩ Reply</A>
+                    <A className="hover:text-accent">Share</A>
+                    <A className="hover:text-accent">Report</A>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 text-center">
+            <A className="inline-block rounded border border-ink px-6 py-2 text-sm font-semibold hover:bg-ink hover:text-background">Load more comments</A>
+          </div>
+        </section>
+
+        {/* Recommended Reading */}
+        <section className="mt-20">
+          <div className="mb-6 border-b-2 border-ink pb-2">
+            <h2 className="serif text-3xl font-bold">Recommended Reading</h2>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {related.map((r, i) => <Card key={"rec" + i} {...r} />)}
+          </div>
+        </section>
+
+        {/* Newsletter */}
+        <section className="mt-20 grid gap-8 border-y-4 border-double border-ink py-12 md:grid-cols-2">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-accent">The Daily Briefing</p>
+            <h2 className="serif mt-2 text-4xl font-bold">Europe, in your inbox every morning at 7</h2>
+            <p className="mt-3 text-muted-foreground">A curated digest of the day's most important business, markets and policy stories — written by our newsroom, read by 480,000 professionals.</p>
+          </div>
+          <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+            <input className="border border-ink/30 bg-background px-4 py-3 text-sm outline-none focus:border-accent" placeholder="Your name" />
+            <input className="border border-ink/30 bg-background px-4 py-3 text-sm outline-none focus:border-accent" placeholder="you@example.com" type="email" />
+            <A className="bg-accent px-4 py-3 text-center text-sm font-bold uppercase tracking-widest text-accent-foreground">Subscribe — it's free</A>
+            <p className="text-xs text-muted-foreground">By subscribing you agree to our <A className="underline">Terms</A>, <A className="underline">Privacy Policy</A> and <A className="underline">Cookie Notice</A>.</p>
+          </form>
+        </section>
+
+        {/* Social */}
+        <section className="mt-20">
+          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Follow The European Ledger</h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            {socials.map((s) => (
+              <A key={s} className="flex items-center justify-between border border-rule bg-paper px-4 py-3 text-sm font-semibold hover:border-accent hover:text-accent">
+                <span>{s}</span><span>→</span>
+              </A>
+            ))}
+          </div>
+        </section>
+
+        {/* Partner sections */}
+        <section className="mt-20">
+          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Partners & Resources</h2>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+            {partnerSections.map((p) => (
+              <div key={p.title}>
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">{p.title}</h3>
+                <ul className="space-y-2 text-sm">
+                  {p.items.map((i) => (
+                    <li key={i}><A className="hover:text-accent">{i}</A></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="mt-16 border-t-4 border-double border-ink bg-paper">
+        <div className="mx-auto max-w-[1320px] px-4 py-12">
+          <div className="mb-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+            <A className="serif text-3xl font-black tracking-tight">The European Ledger</A>
+            <div className="flex flex-wrap gap-2">
+              {socials.slice(0, 6).map((s) => (
+                <A key={s} aria-label={s} className="grid h-9 w-9 place-items-center rounded-full border border-rule text-xs hover:border-accent hover:text-accent">
+                  {s[0]}
+                </A>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-10 md:grid-cols-3 lg:grid-cols-5">
+            {footerCols.map((c) => (
+              <div key={c.title}>
+                <h4 className="mb-3 text-xs font-bold uppercase tracking-widest">{c.title}</h4>
+                <ul className="space-y-2 text-sm">
+                  {c.items.map((i) => <li key={i}><A className="text-ink/80 hover:text-accent">{i}</A></li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 flex flex-col gap-4 border-t border-rule pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+            <div>© 1887–2026 The European Ledger. All rights reserved. Registered in Frankfurt, HRB 24318.</div>
+            <ul className="flex flex-wrap gap-4">
+              {["Imprint","Privacy","Cookies","Terms","Editorial Standards","Corrections","Sitemap"].map((l) => (
+                <li key={l}><A className="hover:text-accent">{l}</A></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </footer>
     </div>
+  );
+}
+
+function PromoBlock({ kicker, title, cta, compact }: { kicker: string; title: string; cta: string; compact?: boolean }) {
+  return (
+    <A className={`not-prose !my-8 block border-y-2 border-accent bg-accent/5 ${compact ? "p-4" : "p-6"}`}>
+      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">{kicker}</div>
+      <div className={`serif mt-2 font-bold leading-snug text-ink ${compact ? "text-lg" : "text-2xl"}`}>{title}</div>
+      <div className="mt-3 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-accent">
+        {cta} <span>→</span>
+      </div>
+    </A>
+  );
+}
+
+function Card({ cat, title, sum }: { cat: string; title: string; sum: string }) {
+  return (
+    <A className="group block">
+      <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+        <div
+          className="h-full w-full transition-transform group-hover:scale-105"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, oklch(0.85 0.04 70) 0%, oklch(0.55 0.08 40) 100%)",
+          }}
+        />
+      </div>
+      <div className="mt-3 text-[11px] font-bold uppercase tracking-widest text-tag">{cat}</div>
+      <h3 className="serif mt-1 text-lg font-bold leading-snug group-hover:text-accent">{title}</h3>
+      <p className="mt-1 text-sm text-muted-foreground">{sum}</p>
+    </A>
   );
 }
