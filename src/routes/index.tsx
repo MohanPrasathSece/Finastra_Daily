@@ -256,99 +256,61 @@ function Article() {
             {/* Body */}
             <div className="prose-article mt-10 max-w-[68ch] space-y-6 text-[17px] leading-[1.75] text-ink/90">
               <p className="drop-cap">
-                For most of the past decade, European investors approached digital assets with a mixture of curiosity and caution. That posture is changing. In quiet conversations across the trading floors of Frankfurt, Paris, Amsterdam and Milan, a new consensus is emerging: artificial intelligence has matured enough to be trusted with material allocations, and the next phase of crypto adoption on the continent will look very different from the last one.
+                When podcast host Léa Fontaine invited one of Europe's most secretive AI fund managers onto <em>Capital Signals</em> this week, the conversation moved quickly from polite introductions to the questions retail investors actually want answered. What follows is an edited transcript of their on-air exchange.
+              </p>
+
+              <h2 className="serif !text-3xl font-bold !mt-12">"So — is the AI really doing the trading?"</h2>
+              <p>
+                <strong>Léa Fontaine:</strong> Let's start with the question my listeners email me every single week. Is the AI really making the trades, or are humans still pulling the levers behind the scenes?
               </p>
               <p>
-                Interviews with more than forty portfolio managers, compliance officers, regulators and technologists conducted by <em>The European Ledger</em> over the past three months reveal a market that has become at once more institutional, more automated, and — in the words of one Zürich-based risk officer — "more boring, in the best possible sense."
+                <strong>Guest:</strong> Both, but not in the way people imagine. The models execute thousands of decisions a second — no human could. What we do is set the boundaries, approve new strategies, and step in when something looks wrong. Think of it as a very disciplined co-pilot.
               </p>
 
               <PromoBlock kicker="Featured analysis" title="See the platform European investors are talking about" cta="Explore Platform" />
 
-              <h2 className="serif !text-3xl font-bold !mt-12">A maturing market, a quieter revolution</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">"Why are retail investors suddenly flooding in?"</h2>
               <p>
-                Data from the European Securities and Markets Authority show that algorithmic systems now account for roughly 71% of crypto trading volume on regulated EU venues, up from 38% just three years ago. The shift has been particularly pronounced among funds with between €50m and €500m under management — the segment most reliant on operational leverage to compete with larger global peers.
+                <strong>Léa:</strong> Q2 retail subscriptions through bank-distributed crypto wrappers hit €4.1 billion. That's not a niche anymore. What changed?
               </p>
               <p>
-                "The dream of beating the market with a clever human is, for most managers in our size bracket, finished," said Léon Brouwer, who runs a long-short crypto fund out of Amsterdam. "What we can do is build systems that listen to a thousand markets at once, react in milliseconds, and don't have a bad morning."
+                <strong>Guest:</strong> Two things. MiCA gave people a regulatory floor they trust, and platforms finally lowered the minimums. You no longer need a million euros to access an AI-managed crypto strategy — a few hundred is enough. That alone reshaped the audience overnight.
               </p>
+
               <blockquote className="my-8 border-l-4 border-accent bg-accent/5 px-6 py-5 serif text-2xl italic leading-snug">
-                "Innovation must not outpace stability — but stability must not become an excuse to avoid innovation."
-                <footer className="mt-3 not-italic text-sm font-semibold text-muted-foreground">— Christine Lagarde, President of the European Central Bank, addressing the Sintra Forum</footer>
+                "The dream of beating the market with a clever human is finished. What we can do is build systems that listen to a thousand markets at once — and don't have a bad morning."
+                <footer className="mt-3 not-italic text-sm font-semibold text-muted-foreground">— On-air guest, <em>Capital Signals</em> Episode 142</footer>
               </blockquote>
 
-              <h2 className="serif !text-3xl font-bold !mt-12">The numbers behind the shift</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">"What could still blow up?"</h2>
               <p>
-                The structural change is visible in three places. First, in regulated assets under management: European crypto ETFs and ETPs collectively hold a record €38.4bn, more than double their 2024 peak. Second, in flows: in the second quarter of 2026 alone, retail subscriptions through bank-distributed crypto wrappers reached €4.1bn. Third, and most quietly, in the composition of those flows: nearly a third now arrives via discretionary mandates explicitly described as "AI-managed."
+                <strong>Léa:</strong> I have to ask. What's the scenario that keeps you awake at night?
               </p>
-              <ul className="!my-6 list-disc space-y-1 pl-6">
-                <li>€38.4bn — assets in European crypto ETFs and ETPs (record)</li>
-                <li>71% — share of EU crypto volume executed algorithmically</li>
-                <li>€4.1bn — Q2 retail subscriptions via bank-distributed wrappers</li>
-                <li>32% — share of new flows tagged as AI-managed mandates</li>
-                <li>1,100 — number of MiCA-licensed entities operating in the EU</li>
-              </ul>
+              <p>
+                <strong>Guest:</strong> AI systems failing in correlated ways. If everyone runs similar models trained on similar data, a regime change none of them have seen could push them all the same direction at the same moment. We haven't lived through a real crisis with this much automation yet. The humility should be considerable.
+              </p>
 
               <PromoBlock kicker="Editor's recommendation" title="The official portal investors are using to access AI-managed strategies" cta="Visit Official Website" />
 
-              <h2 className="serif !text-3xl font-bold !mt-12">From narrative to infrastructure</h2>
+              <h2 className="serif !text-3xl font-bold !mt-12">"What would you tell a first-time listener?"</h2>
               <p>
-                Conversations with policymakers reveal a striking change in tone. Where 2022's cycle was dominated by debates about the legitimacy of crypto itself, the 2026 conversation has moved on. The Markets in Crypto-Assets Regulation, fully in force since the start of this year, has done what its architects hoped: it has made the question "is this legal?" largely uninteresting, and replaced it with "is this well-run?"
+                <strong>Léa:</strong> Last question. Someone is hearing about AI crypto trading for the first time on this podcast. What do they do tomorrow morning?
               </p>
               <p>
-                That is a more boring question. It is also, almost everyone agrees, a more useful one. Custodians are audited. Stablecoin issuers publish reserve attestations. Exchanges segregate customer funds. The result is not a crypto market without risk — risk remains plentiful — but one in which risk can be measured, priced and, increasingly, hedged.
-              </p>
-              <p>
-                Into that maturing infrastructure, AI has arrived not as a marketing slogan but as a working tool. The systems being deployed are not the speculative artificial general intelligences of public imagination; they are narrow, disciplined models trained to do specific jobs: monitor liquidity across two dozen venues, detect funding-rate dislocations, rebalance baskets against a target volatility, flag transactions that resemble historical wash patterns.
-              </p>
-
-              <h2 className="serif !text-3xl font-bold !mt-12">Inside an AI trading desk</h2>
-              <p>
-                On a recent Tuesday, this newspaper was granted access to the trading floor of a mid-sized Parisian firm that asked not to be named. The room is smaller than one might expect — twelve screens, four traders, an espresso machine — and quieter still. The work, as the chief technology officer explained, happens elsewhere: in a colocation facility on the outskirts of Bergamo, where the firm's models execute thousands of decisions per second against a curated universe of digital assets.
-              </p>
-              <p>
-                What the humans do is supervise, intervene and improve. They watch dashboards summarising the models' confidence, exposure and drawdown. They approve parameter changes. They sign off on new strategies before they are allocated capital. And they argue, frequently and productively, about whether a given signal is real.
-              </p>
-
-              <PromoBlock kicker="Live tool" title="Try the same AI-driven analysis used by professional desks" cta="Learn More" />
-
-              <h2 className="serif !text-3xl font-bold !mt-12">Retail joins the institutional wave</h2>
-              <p>
-                What is new in 2026 is that this kind of system is no longer the exclusive preserve of professional desks. A new generation of platforms — some bank-backed, some independent — now allows retail investors to subscribe to AI-managed crypto strategies with minimums measured in the hundreds rather than the millions of euros. Early adopters describe the experience as closer to a managed ETF than a brokerage account.
-              </p>
-              <p>
-                Regulators have noticed. The European Banking Authority confirmed earlier this month that it is consulting on disclosure standards specific to AI-managed mandates, with particular attention to how performance is reported and how model risk is communicated to non-professional clients.
-              </p>
-
-              <h2 className="serif !text-3xl font-bold !mt-12">What could still go wrong</h2>
-              <p>
-                None of this means the risks have vanished. Critics — and there are thoughtful ones — point out that AI systems can fail in correlated ways, that backtests rarely capture genuinely novel regimes, and that the apparent calm of the past eighteen months may itself be lulling the market into a false sense of robustness. A senior official at one national supervisor put it bluntly: "We have not yet seen what these systems do in a real crisis. Until we do, the humility should be considerable."
-              </p>
-              <p>
-                The same official, however, was clear that the direction of travel is not in doubt. "The question is not whether AI will be embedded in European market structure. It already is. The question is how we, as regulators, keep up — and how we ensure that the benefits, which are real, reach more than a handful of firms."
-              </p>
-
-              <h2 className="serif !text-3xl font-bold !mt-12">A continental story, told locally</h2>
-              <p>
-                It would be a mistake to read this as a single European story. The patterns differ by jurisdiction. Germany's adoption is driven by Mittelstand banks integrating crypto custody into existing private-client offerings. France's growth is concentrated among independent asset managers building bespoke quantitative products. Italy and Spain are seeing the strongest retail subscription growth, often through partnerships between local banks and pan-European platforms. The Nordics, true to form, are most advanced on infrastructure and tokenisation pilots.
-              </p>
-              <p>
-                Yet the through-line is unmistakable. Across the continent, sophisticated investors are concluding that digital assets are no longer a fringe allocation to be debated, but an asset class to be managed — and that the most efficient way to manage them, for most participants, is with the help of machines that never sleep, never panic, and never quite believe their own success.
-              </p>
-              <p>
-                Whether that confidence is itself warranted is the question that will define the next cycle.
+                <strong>Guest:</strong> Start small. Use a regulated, MiCA-licensed platform. Read the model-risk disclosure — actually read it. And remember that "AI-managed" is not a magic word. It's a tool. The boring investors usually win.
               </p>
 
               <div className="mt-10 border-t border-rule pt-6 text-sm text-muted-foreground">
-                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>The European Ledger</em>. She reports on capital markets, financial regulation and the intersection of finance and technology.</p>
-                <p className="mt-3">Additional reporting by Henrik Dahl (Copenhagen), Sofia Marchetti (Milan) and Tomás Pereira (Lisbon).</p>
+                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>The European Ledger</em>. The full <em>Capital Signals</em> episode is available on all major podcast platforms.</p>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {["#AI","#Crypto","#Bitcoin","#Ethereum","#MiCA","#ECB","#Europe","#Trading","#Blockchain","#Fintech","#Regulation","#Markets"].map((t) => (
+                {["#Podcast","#AI","#Crypto","#Bitcoin","#MiCA","#Europe","#Trading","#Interview"].map((t) => (
                   <A key={t} className="rounded-full border border-rule px-3 py-1 text-xs hover:border-accent hover:text-accent">{t}</A>
                 ))}
               </div>
             </div>
+
           </article>
 
           {/* Sidebar */}
