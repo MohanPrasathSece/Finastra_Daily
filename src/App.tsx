@@ -1,5 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import heroImg from "@/assets/hero.jpg";
+import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import heroImg from "@/assets/hero.png";
+import "./styles.css";
 
 const URL = "https://www.egitel.com/5itg7bhhf71/tradegpt/?lang=fr&aff_id=3408";
 
@@ -8,18 +10,6 @@ const A = ({ children, className = "", ...rest }: React.AnchorHTMLAttributes<HTM
     {children}
   </a>
 );
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "European Investors Shift Toward AI-Powered Crypto Trading Platforms Amid Market Volatility — The European Ledger" },
-      { name: "description", content: "An in-depth report on how European retail and institutional investors are adopting AI-driven trading systems for digital assets." },
-      { property: "og:title", content: "European Investors Shift Toward AI-Powered Crypto Trading Platforms" },
-      { property: "og:description", content: "Editorial analysis of the European crypto, blockchain and AI trading landscape." },
-    ],
-  }),
-  component: Article,
-});
 
 const utilityLinks = ["Subscribe", "Login", "Register", "Premium", "Newsletters", "Podcasts", "Mobile App", "Events", "Careers", "Contact"];
 const nav = ["Home","Latest News","Politics","Business","Economy","Finance","Markets","Crypto","Blockchain","Technology","Artificial Intelligence","Startups","Energy","Environment","Science","Opinion","Videos","Podcasts","Education","Lifestyle","Travel","Culture","Sports"];
@@ -102,7 +92,6 @@ const related = [
   { cat: "Technology", title: "Inside the data centres powering EU AI trading", sum: "Energy contracts, latency wars and a new geography of finance." },
 ];
 
-
 const commentNames = [
   "Marc Lefèvre","Anneliese Hoffmann","Giulia Romano","Henrik Sørensen","Pilar Navarro","Tomáš Novák","Élodie Bernard","Lukas Berger",
   "Bianca Costa","Mikael Lindgren","Sofia Andersson","Daan de Vries","Catherine Dubois","Rafael Fernández","Jana Kowalski","Stefan Müller",
@@ -143,6 +132,37 @@ const partnerSections = [
   { title: "Market Reports", items: ["EU Quarterly Review","Digital Asset Outlook","European Bank Index","Energy Markets Brief","Tech Earnings Recap","Fixed Income Monitor","SME Lending Report","Real Estate Watch","Commodities Snapshot","Currency Forecast"] },
 ];
 
+function PromoBlock({ kicker, title, cta, compact }: { kicker: string; title: string; cta: string; compact?: boolean }) {
+  return (
+    <A className={`not-prose !my-8 block border-y-2 border-accent bg-accent/5 ${compact ? "p-4" : "p-6"}`}>
+      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">{kicker}</div>
+      <div className={`serif mt-2 font-bold leading-snug text-ink ${compact ? "text-lg" : "text-2xl"}`}>{title}</div>
+      <div className="mt-3 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-accent">
+        {cta} <span>→</span>
+      </div>
+    </A>
+  );
+}
+
+function Card({ cat, title, sum }: { cat: string; title: string; sum: string }) {
+  return (
+    <A className="group block">
+      <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+        <div
+          className="h-full w-full transition-transform group-hover:scale-105"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, oklch(0.85 0.04 70) 0%, oklch(0.55 0.08 40) 100%)",
+          }}
+        />
+      </div>
+      <div className="mt-3 text-[11px] font-bold uppercase tracking-widest text-tag">{cat}</div>
+      <h3 className="serif mt-1 text-lg font-bold leading-snug group-hover:text-accent">{title}</h3>
+      <p className="mt-1 text-sm text-muted-foreground">{sum}</p>
+    </A>
+  );
+}
+
 function Article() {
   return (
     <div className="bg-background text-ink min-h-screen">
@@ -167,7 +187,7 @@ function Article() {
               Vol. CXIV · No. 24,318<br/>Independent since 1887
             </div>
             <A className="text-center">
-              <div className="serif text-4xl font-black tracking-tight md:text-6xl">The European Ledger</div>
+              <div className="serif text-4xl font-black tracking-tight md:text-6xl">Finastra Daily</div>
               <div className="mt-1 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Finance · Policy · Innovation</div>
             </A>
             <div className="hidden justify-end gap-3 md:flex">
@@ -236,7 +256,7 @@ function Article() {
               <div className="text-muted-foreground">Published <time>15 June 2026, 06:00 CET</time> · Updated 09:42</div>
               <div className="text-muted-foreground">⏱ 6 min read</div>
               <A className="text-muted-foreground hover:text-accent">Edited by Henrik Dahl</A>
-              <A className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Fact-checked</A>
+              <div className="flex items-center gap-1 text-xs font-semibold text-[oklch(0.5_0.16_150)]">✓ Fact-checked</div>
               <div className="ml-auto flex gap-2">
                 {["Share","Tweet","Email","Save","Print"].map((s) => (
                   <A key={s} className="rounded border border-rule px-2 py-1 text-xs hover:border-accent hover:text-accent">{s}</A>
@@ -246,9 +266,9 @@ function Article() {
 
             {/* Hero */}
             <A className="mt-8 block">
-              <img src={heroImg} alt="Podcast host Léa Fontaine interviewing a guest in the Capital Signals studio" width={1600} height={900} className="w-full" />
+              <img src={heroImg} alt="Swiss influencer talking on the Capital Signals podcast in Switzerland" width={1600} height={900} className="w-full" />
               <figcaption className="mt-2 text-xs text-muted-foreground">
-                Podcast host Léa Fontaine (right) interviewing her guest on the <em>Capital Signals</em> show, recorded live in Frankfurt. <span className="italic">Photograph: The European Ledger / Studio</span>
+                Swiss influencer (left) talking with the host on the <em>Capital Signals</em> show, recorded live in Zürich, Switzerland. <span className="italic">Photograph: Finastra Daily / Studio</span>
               </figcaption>
             </A>
 
@@ -301,7 +321,7 @@ function Article() {
               </p>
 
               <div className="mt-10 border-t border-rule pt-6 text-sm text-muted-foreground">
-                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>The European Ledger</em>. The full <em>Capital Signals</em> episode is available on all major podcast platforms.</p>
+                <p><strong className="text-ink">Claire Vasseur</strong> is European Markets Correspondent for <em>Finastra Daily</em>. The full <em>Capital Signals</em> episode is available on all major podcast platforms.</p>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
@@ -337,7 +357,7 @@ function Article() {
         <section className="mt-20">
           <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
             <h2 className="serif text-3xl font-bold">Related Articles</h2>
-            <A className="text-xs font-semibold uppercase tracking-widest hover:text-accent">View all →</A>
+            <A className="text-xs font-semibold uppercase tracking-widest">View all →</A>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {related.map((r, i) => <Card key={i} {...r} />)}
@@ -388,15 +408,6 @@ function Article() {
           </div>
         </section>
 
-        {/* Recommended Reading */}
-        <section className="mt-20">
-          <div className="mb-6 border-b-2 border-ink pb-2">
-            <h2 className="serif text-3xl font-bold">Recommended Reading</h2>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {related.map((r, i) => <Card key={"rec" + i} {...r} />)}
-          </div>
-        </section>
 
         {/* Newsletter */}
         <section className="mt-20 grid gap-8 border-y-4 border-double border-ink py-12 md:grid-cols-2">
@@ -415,7 +426,7 @@ function Article() {
 
         {/* Social */}
         <section className="mt-20">
-          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Follow The European Ledger</h2>
+          <h2 className="serif mb-6 border-b-2 border-ink pb-2 text-3xl font-bold">Follow Finastra Daily</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
             {socials.map((s) => (
               <A key={s} className="flex items-center justify-between border border-rule bg-paper px-4 py-3 text-sm font-semibold hover:border-accent hover:text-accent">
@@ -447,7 +458,7 @@ function Article() {
       <footer className="mt-16 border-t-4 border-double border-ink bg-paper">
         <div className="mx-auto max-w-[1320px] px-4 py-12">
           <div className="mb-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-            <A className="serif text-3xl font-black tracking-tight">The European Ledger</A>
+            <A className="serif text-3xl font-black tracking-tight">Finastra Daily</A>
             <div className="flex flex-wrap gap-2">
               {socials.slice(0, 6).map((s) => (
                 <A key={s} aria-label={s} className="grid h-9 w-9 place-items-center rounded-full border border-rule text-xs hover:border-accent hover:text-accent">
@@ -467,7 +478,7 @@ function Article() {
             ))}
           </div>
           <div className="mt-12 flex flex-col gap-4 border-t border-rule pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-            <div>© 1887–2026 The European Ledger. All rights reserved. Registered in Frankfurt, HRB 24318.</div>
+            <div>© 1887–2026 Finastra Daily. All rights reserved. Registered in Frankfurt, HRB 24318.</div>
             <ul className="flex flex-wrap gap-4">
               {["Imprint","Privacy","Cookies","Terms","Editorial Standards","Corrections","Sitemap"].map((l) => (
                 <li key={l}><A className="hover:text-accent">{l}</A></li>
@@ -480,33 +491,12 @@ function Article() {
   );
 }
 
-function PromoBlock({ kicker, title, cta, compact }: { kicker: string; title: string; cta: string; compact?: boolean }) {
-  return (
-    <A className={`not-prose !my-8 block border-y-2 border-accent bg-accent/5 ${compact ? "p-4" : "p-6"}`}>
-      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">{kicker}</div>
-      <div className={`serif mt-2 font-bold leading-snug text-ink ${compact ? "text-lg" : "text-2xl"}`}>{title}</div>
-      <div className="mt-3 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-accent">
-        {cta} <span>→</span>
-      </div>
-    </A>
-  );
-}
+export default function App() {
+  const queryClient = new QueryClient();
 
-function Card({ cat, title, sum }: { cat: string; title: string; sum: string }) {
   return (
-    <A className="group block">
-      <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
-        <div
-          className="h-full w-full transition-transform group-hover:scale-105"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, oklch(0.85 0.04 70) 0%, oklch(0.55 0.08 40) 100%)",
-          }}
-        />
-      </div>
-      <div className="mt-3 text-[11px] font-bold uppercase tracking-widest text-tag">{cat}</div>
-      <h3 className="serif mt-1 text-lg font-bold leading-snug group-hover:text-accent">{title}</h3>
-      <p className="mt-1 text-sm text-muted-foreground">{sum}</p>
-    </A>
+    <QueryClientProvider client={queryClient}>
+      <Article />
+    </QueryClientProvider>
   );
 }
