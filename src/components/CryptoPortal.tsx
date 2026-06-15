@@ -1,6 +1,5 @@
 import React, { useState, FormEvent } from "react";
 import { ArrowRight, CircleCheck, Loader2, ArrowLeft, ShieldCheck, TrendingUp, Cpu, Server } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { submitLeadToCRM } from "@/lib/crmService";
 import { toast } from "sonner";
@@ -53,7 +52,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-white">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-zinc-800 selection:text-white">
       {/* Header */}
       <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-4">
@@ -71,26 +70,26 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-medium hidden sm:inline">Portail Trading</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[9px] font-bold text-emerald-400 font-mono tracking-widest uppercase">PORT SECURE ACTIF</span>
+          <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full">
+            <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[9px] font-bold text-white font-mono tracking-widest uppercase">PORT SECURE ACTIF</span>
           </div>
         </div>
       </header>
 
       {/* Hero / Form Section */}
       <section className="relative overflow-hidden border-b border-zinc-900 py-16 lg:py-24 crypto-grid-bg">
-        {/* Decorative background glow */}
-        <div className="absolute top-1/4 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
+        {/* Decorative background glow (subtle gray) */}
+        <div className="absolute top-1/4 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-[120px]" />
 
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="grid gap-12 lg:grid-cols-[1fr_450px] items-center">
             
             {/* Value Proposition */}
             <div className="space-y-8 text-left">
-              <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-md">
-                <ShieldCheck className="h-4 w-4 text-cyan-400" />
-                <span className="text-xs font-semibold text-cyan-300 font-mono uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-md">
+                <ShieldCheck className="h-4 w-4 text-white" />
+                <span className="text-xs font-semibold text-zinc-300 font-mono uppercase tracking-wider">
                   Accès Algorithmique Protégé · Réglementation MiCA
                 </span>
               </div>
@@ -106,8 +105,8 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
                   <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Perf. Moyenne 24h</div>
-                  <div className="text-2xl font-bold text-emerald-400 mt-1 flex items-center gap-1 font-mono">
-                    <TrendingUp className="h-5 w-5" />
+                  <div className="text-2xl font-bold text-white mt-1 flex items-center gap-1 font-mono">
+                    <TrendingUp className="h-5 w-5 text-white" />
                     +2.84%
                   </div>
                 </div>
@@ -119,21 +118,21 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
 
                 <div className="border border-zinc-800 bg-zinc-900/40 p-4 rounded-lg backdrop-blur-sm">
                   <div className="text-zinc-500 text-xs font-semibold uppercase tracking-wider">Temps de Réponse</div>
-                  <div className="text-2xl font-bold text-cyan-400 mt-1 font-mono">140µs</div>
+                  <div className="text-2xl font-bold text-white mt-1 font-mono">140µs</div>
                 </div>
               </div>
 
               <ul className="space-y-3 text-sm text-zinc-400">
                 <li className="flex items-center gap-2">
-                  <span className="text-cyan-400 font-mono">✓</span>
+                  <span className="text-white font-mono">✓</span>
                   Aucune période de blocage — Retraits flexibles sous 24h
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-cyan-400 font-mono">✓</span>
+                  <span className="text-white font-mono">✓</span>
                   Sécurité de niveau institutionnel avec garde cryptée à froid
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-cyan-400 font-mono">✓</span>
+                  <span className="text-white font-mono">✓</span>
                   Conformité totale avec les règlements européens sur les marchés d'actifs
                 </li>
               </ul>
@@ -141,14 +140,14 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
 
             {/* Premium White Registration Form */}
             <div className="relative">
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 blur-xl opacity-60 pointer-events-none" />
+              <div className="absolute -inset-1 rounded-2xl bg-zinc-800/20 blur-xl opacity-60 pointer-events-none" />
               
               <div className="relative border border-zinc-200 bg-white text-zinc-950 rounded-xl p-6 md:p-8 shadow-2xl">
                 {!isSubmitted ? (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
                       <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <div className="h-2 w-2 rounded-full bg-black animate-pulse" />
                         <span className="text-xs font-bold text-zinc-500 font-mono tracking-wider">PORTS DE TRADING EN LIGNE</span>
                       </div>
                     </div>
@@ -167,13 +166,14 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                         <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
                           Nom complet
                         </Label>
-                        <Input
+                        <input
                           id="name"
+                          type="text"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           required
                           placeholder="Jean Dupont"
-                          className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400 font-medium"
+                          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black block font-medium"
                         />
                       </div>
 
@@ -181,14 +181,14 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                         <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
                           Adresse e-mail
                         </Label>
-                        <Input
+                        <input
                           id="email"
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
                           placeholder="nom@domaine.com"
-                          className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400 font-medium"
+                          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black block font-medium"
                         />
                       </div>
 
@@ -196,14 +196,14 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                         <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left">
                           Numéro de téléphone
                         </Label>
-                        <Input
+                        <input
                           id="phone"
                           type="tel"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           required
                           placeholder="+33 6 12 34 56 78"
-                          className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400 font-medium"
+                          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black block font-medium"
                         />
                       </div>
 
@@ -217,7 +217,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
                           placeholder="Objectifs d'investissement, questions..."
-                          className="flex w-full rounded-md border border-zinc-200 bg-zinc-50/50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 md:text-sm resize-none font-medium"
+                          className="flex w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black md:text-sm resize-none font-medium"
                         />
                       </div>
 
@@ -242,11 +242,11 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                   </div>
                 ) : (
                   <div className="text-center py-8 space-y-4 relative overflow-hidden">
-                    {/* Falling particles */}
+                    {/* Falling particles (grayscale) */}
                     {Array.from({ length: 10 }).map((_, i) => (
                       <div
                         key={i}
-                        className="absolute animate-coin-fall text-cyan-600/20 select-none pointer-events-none text-xs font-semibold"
+                        className="absolute animate-coin-fall text-zinc-400/20 select-none pointer-events-none text-xs font-semibold"
                         style={{
                           left: `${Math.random() * 80 + 10}%`,
                           animationDelay: `${Math.random() * 1.5}s`,
@@ -257,7 +257,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                       </div>
                     ))}
 
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200">
                       <CircleCheck className="h-6 w-6" />
                     </div>
 
@@ -288,7 +288,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest font-mono">Flux en Direct</div>
+              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Flux en Direct</div>
               <h2 className="serif text-3xl font-bold text-white mt-1">Données Techniques du Pool Algorithmique</h2>
             </div>
             <div className="text-zinc-500 text-xs font-mono">
@@ -300,7 +300,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Bitcoin / EUR</span>
-                <span className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">+4.12%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+4.12%</span>
               </div>
               <div className="text-3xl font-bold font-mono text-white">58,740.00 €</div>
               <div className="text-xs text-zinc-500">Moyenne pondérée du carnet d'ordres globale</div>
@@ -309,7 +309,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Ethereum / EUR</span>
-                <span className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">+3.28%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+3.28%</span>
               </div>
               <div className="text-3xl font-bold font-mono text-white">3,145.50 €</div>
               <div className="text-xs text-zinc-500">Flux d'exécution de gaz intelligent optimisé</div>
@@ -318,7 +318,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             <div className="border border-zinc-900 bg-zinc-900/20 p-6 rounded-xl space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-zinc-300">Solana / EUR</span>
-                <span className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">+8.65%</span>
+                <span className="text-xs font-mono text-zinc-300 bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded">+8.65%</span>
               </div>
               <div className="text-3xl font-bold font-mono text-white">142.10 €</div>
               <div className="text-xs text-zinc-500">Fréquence de routage ultra-rapide active</div>
@@ -331,7 +331,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       <section className="py-20 bg-zinc-900/30 border-b border-zinc-900">
         <div className="mx-auto max-w-[1320px] px-4">
           <div className="mb-12 text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest font-mono">Recherche et Analyses</span>
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Recherche et Analyses</span>
             <h2 className="serif text-3xl font-black text-white md:text-4xl">Notes du Bureau Quantitatif</h2>
             <p className="text-zinc-500 text-sm font-light">
               Des rapports approfondis rédigés par nos analystes financiers et nos ingénieurs système sur l'avenir de l'automatisation.
@@ -349,12 +349,12 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                     backgroundImage: "linear-gradient(135deg, oklch(0.25 0.08 240) 0%, oklch(0.15 0.05 280) 100%)"
                   }}
                 />
-                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-cyan-400 uppercase tracking-wider border border-zinc-800">
+                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Technique
                 </div>
               </div>
               <div className="text-zinc-500 text-xs font-mono">15 juin 2026 · 8 min de lecture</div>
-              <h3 className="serif text-xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug">
+              <h3 className="serif text-xl font-bold text-white group-hover:text-zinc-400 transition-colors leading-snug">
                 L'Arbitrage Algorithmique : Comment l'IA redéfinit la gestion des risques crypto en 2026.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
@@ -371,12 +371,12 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                     backgroundImage: "linear-gradient(135deg, oklch(0.25 0.05 150) 0%, oklch(0.15 0.03 180) 100%)"
                   }}
                 />
-                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-cyan-400 uppercase tracking-wider border border-zinc-800">
+                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Réglementation
                 </div>
               </div>
               <div className="text-zinc-500 text-xs font-mono">12 juin 2026 · 6 min de lecture</div>
-              <h3 className="serif text-xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug">
+              <h3 className="serif text-xl font-bold text-white group-hover:text-zinc-400 transition-colors leading-snug">
                 Comprendre la conformité MiCA et la protection des investisseurs en Europe.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
@@ -393,12 +393,12 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                     backgroundImage: "linear-gradient(135deg, oklch(0.25 0.08 30) 0%, oklch(0.15 0.04 60) 100%)"
                   }}
                 />
-                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-cyan-400 uppercase tracking-wider border border-zinc-800">
+                <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-zinc-800">
                   Macroéconomie
                 </div>
               </div>
               <div className="text-zinc-500 text-xs font-mono">10 juin 2026 · 10 min de lecture</div>
-              <h3 className="serif text-xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-snug">
+              <h3 className="serif text-xl font-bold text-white group-hover:text-zinc-400 transition-colors leading-snug">
                 La transition du Bitcoin vers un actif de réserve macroéconomique stable.
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed font-light">
@@ -417,7 +417,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
           
           <div className="grid gap-8 sm:grid-cols-2">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-cyan-400">
+              <div className="flex items-center gap-2 text-white">
                 <Cpu className="h-4 w-4" />
                 <h4 className="font-semibold text-white">Analyse des flux LLM</h4>
               </div>
@@ -427,7 +427,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-cyan-400">
+              <div className="flex items-center gap-2 text-white">
                 <Server className="h-4 w-4" />
                 <h4 className="font-semibold text-white">Frais de Performance transparents</h4>
               </div>
