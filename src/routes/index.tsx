@@ -358,7 +358,7 @@ function Article() {
           </A>
 
           <ul className="space-y-6">
-            {commentNames.map((name, i) => (
+            {commentNames.slice(0, 10).map((name, i) => (
               <li key={name} className="flex gap-4 border-b border-rule pb-6">
                 <A className="shrink-0">
                   <span className="grid h-11 w-11 place-items-center rounded-full bg-muted serif text-sm font-bold">
