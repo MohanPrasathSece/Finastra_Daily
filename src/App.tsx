@@ -1,27 +1,23 @@
-import React, { useState, useContext, createContext, FormEvent } from "react";
+import React, { useState, useContext, createContext, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster, toast } from "sonner";
-import { Coins, ArrowRight, CircleCheck, ShieldCheck, Loader2 } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { submitLeadToCRM } from "@/lib/crmService";
+import { Toaster } from "sonner";
 import heroImg from "@/assets/hero.png";
+import { CryptoPortal } from "./components/CryptoPortal";
 import "./styles.css";
 
-const ModalContext = createContext<{ openModal: () => void }>({ openModal: () => {} });
+const NavigationContext = createContext<{ navigateToPortal: () => void }>({ navigateToPortal: () => {} });
 
 const A = ({ children, className = "", onClick, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-  const { openModal } = useContext(ModalContext);
+  const { navigateToPortal } = useContext(NavigationContext);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (onClick) onClick(e);
-    openModal();
+    navigateToPortal();
   };
 
   return (
-    <a href="#" className={className} onClick={handleClick} {...rest}>
+    <a href="?page=portal" className={className} onClick={handleClick} {...rest}>
       {children}
     </a>
   );
@@ -506,207 +502,44 @@ function Article() {
   );
 }
 
-function LeadFormModal({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!fullName || !email || !phone) {
-      toast.error("Veuillez remplir tous les champs obligatoires.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    toast.loading("Établissement d'une connexion sécurisée...", { id: "crm-submit" });
-
-    const response = await submitLeadToCRM({
-      fullName,
-      email,
-      phone,
-      message,
-      investmentGoal: "10000",
-    });
-
-    if (response.success) {
-      toast.success("Connexion sécurisée !", { id: "crm-submit" });
-      setIsSubmitted(true);
-    } else {
-      toast.error(response.message || "Échec de l'envoi du prospect.", { id: "crm-submit" });
-    }
-    setIsSubmitting(false);
-  };
-
-  const resetForm = () => {
-    setFullName("");
-    setEmail("");
-    setPhone("");
-    setMessage("");
-    setIsSubmitted(false);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onOpenChange={(val) => {
-        onOpenChange(val);
-        if (!val) {
-          resetForm();
-        }
-      }}
-    >
-      <DialogContent className="max-w-md border border-zinc-200 bg-white text-zinc-900 rounded-lg p-6 shadow-2xl">
-        {!isSubmitted ? (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs font-semibold text-zinc-500 font-mono">LIEN SÉCURISÉ ACTIF</span>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold tracking-tight text-zinc-950 font-sans text-left">
-                Demander un accès sécurisé
-              </h3>
-              <p className="text-sm text-zinc-500 text-left">
-                Soumettez vos coordonnées pour vous connecter à notre bureau de trading automatisé.
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
-                  Nom complet
-                </Label>
-                <Input
-                  id="name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  placeholder="Jean Dupont"
-                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
-                  Adresse e-mail
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="nom@domaine.com"
-                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="phone" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
-                  Numéro de téléphone
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                  placeholder="+33 6 12 34 56 78"
-                  className="h-10 border-zinc-200 bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus-visible:ring-1 focus-visible:ring-zinc-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="message" className="text-xs font-semibold uppercase tracking-wider text-zinc-500 block text-left">
-                  Message <span className="text-zinc-400 font-normal lowercase">(facultatif)</span>
-                </Label>
-                <textarea
-                  id="message"
-                  rows={2}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Parlez-nous de vos objectifs de trading..."
-                  className="flex w-full rounded-md border border-zinc-200 bg-zinc-50/50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 md:text-sm resize-none"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 rounded bg-zinc-950 py-2.5 text-xs font-bold uppercase tracking-widest text-white hover:bg-zinc-800 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer mt-2"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
-                    Connexion...
-                  </>
-                ) : (
-                  <>
-                    Soumettre
-                    <ArrowRight className="h-3.5 w-3.5 text-white" />
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="text-center py-8 space-y-4 relative overflow-hidden">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute animate-coin-fall text-cyan-500/30 select-none pointer-events-none text-xs font-semibold"
-                style={{
-                  left: `${Math.random() * 80 + 10}%`,
-                  animationDelay: `${Math.random() * 1.5}s`,
-                  animationDuration: `${2.2 + Math.random() * 1.2}s`,
-                }}
-              >
-                ✦
-              </div>
-            ))}
-
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
-              <CircleCheck className="h-6 w-6" />
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold text-zinc-950 font-sans">Connexion établie</h3>
-              <p className="text-sm text-zinc-500 max-w-xs mx-auto">
-                Votre demande sécurisée a été transmise avec succès au bureau algorithmique. Nous vous contacterons sous peu.
-              </p>
-            </div>
-
-            <button
-              onClick={() => onOpenChange(false)}
-              className="mt-4 px-5 py-2 bg-zinc-50 border border-zinc-200 text-zinc-800 hover:text-zinc-950 rounded text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 hover:border-zinc-300 transition-all cursor-pointer"
-            >
-              Fermer le port sécurisé
-            </button>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 export default function App() {
   const queryClient = new QueryClient();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState<'news' | 'portal'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("page") === "portal" ? "portal" : "news";
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setCurrentPage(params.get("page") === "portal" ? "portal" : "news");
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const navigateToPortal = () => {
+    window.history.pushState({}, "", "?page=portal");
+    setCurrentPage("portal");
+    window.scrollTo(0, 0);
+  };
+
+  const navigateToNews = () => {
+    window.history.pushState({}, "", "/");
+    setCurrentPage("news");
+    window.scrollTo(0, 0);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ModalContext.Provider value={{ openModal: () => setIsModalOpen(true) }}>
-        <Article />
-        <LeadFormModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+      <NavigationContext.Provider value={{ navigateToPortal }}>
+        {currentPage === "portal" ? (
+          <CryptoPortal onBack={navigateToNews} />
+        ) : (
+          <Article />
+        )}
         <Toaster position="top-right" theme="dark" richColors />
-      </ModalContext.Provider>
+      </NavigationContext.Provider>
     </QueryClientProvider>
   );
 }
