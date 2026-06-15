@@ -347,7 +347,7 @@ function Article() {
         {/* Comments */}
         <section className="mt-20">
           <div className="mb-6 flex items-end justify-between border-b-2 border-ink pb-2">
-            <h2 className="serif text-3xl font-bold">Reader Comments <span className="text-muted-foreground">({commentNames.length})</span></h2>
+            <h2 className="serif text-3xl font-bold">Reader Comments <span className="text-muted-foreground">(10)</span></h2>
             <div className="flex gap-2">
               {["Top","Newest","Oldest"].map((t) => <A key={t} className="text-xs font-semibold uppercase tracking-widest hover:text-accent">{t}</A>)}
             </div>
