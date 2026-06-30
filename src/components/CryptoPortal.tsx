@@ -28,11 +28,25 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setPhoneError("");
+    
     if (!fullName || !email || !phone) {
       toast.error("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    const cleanNum = phone.replace(/\s+/g, "");
+    if (!cleanNum) {
+      setPhoneError("Veuillez entrer un numéro de téléphone");
+      setIsSubmitting(false);
+      return;
+    } else if (!/^(\+41|0041|0)?[1-9]\d{8}$/.test(cleanNum)) {
+      setPhoneError("Veuillez entrer un numéro suisse valide (ex: 079 123 45 67)");
+      setIsSubmitting(false);
       return;
     }
 
@@ -180,11 +194,19 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                           id="phone"
                           type="tel"
                           value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                            setPhoneError("");
+                          }}
                           required
                           placeholder="+33 6 12 34 56 78"
                           className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black block font-medium"
                         />
+                        {phoneError && (
+                          <div className="text-xs text-red-500 font-bold mt-1">
+                            {phoneError}
+                          </div>
+                        )}
                       </div>
 
                       <div className="space-y-1.5">

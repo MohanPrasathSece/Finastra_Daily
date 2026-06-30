@@ -18,23 +18,41 @@ const CRM_AUTH_TOKEN = import.meta.env.VITE_CRM_AUTH_TOKEN || "AFF_3_1c3fcc3cac3
 export async function submitLeadToCRM(data: LeadSubmissionData): Promise<SubmissionResponse> {
   // Parse full name into first and last name
   const nameParts = data.fullName.trim().split(/\s+/);
-  const first_name = nameParts[0] || "";
-  const last_name = nameParts.slice(1).join(" ") || "Investor";
+  const first_name = nameParts[0] || "Unknown";
+  const last_name = nameParts.slice(1).join(" ") || "Lead";
+
+  // Swiss phone auto-formatter
+  let phone = (data.phone || "").replace(/[^0-9+]/g, '');
+  if (phone) {
+    if (phone.startsWith('+')) {
+      phone = '00' + phone.slice(1);
+    }
+    if (phone.startsWith('41') && phone.length === 11) {
+      phone = '00' + phone;
+    }
+    if (!phone.startsWith('0041')) {
+      if (phone.startsWith('0') && !phone.startsWith('00')) {
+        phone = '0041' + phone.slice(1);
+      } else if (!phone.startsWith('00')) {
+        phone = '0041' + phone;
+      }
+    }
+  } else {
+    phone = "0000000000";
+  }
 
   // Build the payload per the specified API documentation
   const payload = {
-    country_name: "cy",
-    description: `Finastra Daily Lead: ${data.fullName}`,
-    phone: data.phone,
+    country_name: "ch",
+    description: data.message ? data.message.trim() : "Signup Lead",
+    phone: phone,
     email: data.email,
     first_name: first_name,
     last_name: last_name,
     custom_fields: {
-      Source_ID: "fb",
-      How_Much_Invested: data.investmentGoal || "10000",
-      Outline_Your_Case: data.message || "No message provided",
-      start_date: "20.01.2019",
-      end_date: "20.2.2026",
+      Source_ID: "website",
+      How_Much_Invested: data.investmentGoal || "0",
+      Outline_Your_Case: data.message || "",
     },
   };
 
