@@ -68,7 +68,7 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
   // Build the payload per the specified API documentation
   const payload = {
     country_name: countryCode.toLowerCase(),
-    description: data.message ? data.message.trim() : "Signup Lead",
+    description: "Finastra Daily",
     phone: formattedPhone,
     email: data.email,
     first_name: first_name,
@@ -105,6 +105,16 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       const errorText = await response.text().catch(() => "Unknown error");
       throw new Error(`HTTP error ${response.status}: ${errorText}`);
     }
+
+    try {
+      const url = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_DASHBOARD_URL) || "https://autodigix-leads-dashboard.vercel.app/api/increment";
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ website: "Finastra Daily", type: data.message ? "contact" : "signup", name: data.name, email: data.email})
+      }).catch(() => {});
+    } catch(e){}
+
 
     // Since the document states "This request doesn't return any response body" for Example Response:
     // "Example Response: Body Headers (0) No response body"
