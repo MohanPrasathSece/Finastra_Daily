@@ -12,6 +12,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { submitLeadToCRM } from "@/lib/crmService";
 import { toast } from "sonner";
+import { PhoneInput } from "@/components/PhoneInput";
 
 import algoImg from "@/assets/crypto_trading_algo.png";
 import complianceImg from "@/assets/crypto_compliance_mica.png";
@@ -25,6 +26,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("FR");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -32,21 +34,14 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setPhoneError("");
     
     if (!fullName || !email || !phone) {
       toast.error("Veuillez remplir tous les champs obligatoires.");
       return;
     }
 
-    const cleanNum = phone.replace(/\s+/g, "");
-    if (!cleanNum) {
-      setPhoneError("Veuillez entrer un numéro de téléphone");
-      setIsSubmitting(false);
-      return;
-    } else if (!/^(\+41|0041|0)?[1-9]\d{8}$/.test(cleanNum)) {
-      setPhoneError("Veuillez entrer un numéro suisse valide (ex: 079 123 45 67)");
-      setIsSubmitting(false);
+    if (phoneError) {
+      toast.error(phoneError);
       return;
     }
 
@@ -57,6 +52,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       fullName,
       email,
       phone,
+      countryCode,
       message,
       investmentGoal: "10000",
     });
@@ -74,6 +70,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
     setFullName("");
     setEmail("");
     setPhone("");
+    setCountryCode("FR");
     setMessage("");
     setIsSubmitted(false);
   };
@@ -183,31 +180,11 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
                         />
                       </div>
 
-                      <div className="space-y-1.5">
-                        <Label
-                          htmlFor="phone"
-                          className="text-xs font-bold uppercase tracking-wider text-zinc-500 block text-left"
-                        >
-                          Numéro de téléphone
-                        </Label>
-                        <input
-                          id="phone"
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => {
-                            setPhone(e.target.value);
-                            setPhoneError("");
-                          }}
-                          required
-                          placeholder="+33 6 12 34 56 78"
-                          className="h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black block font-medium"
-                        />
-                        {phoneError && (
-                          <div className="text-xs text-red-500 font-bold mt-1">
-                            {phoneError}
-                          </div>
-                        )}
-                      </div>
+                      <PhoneInput onChange={(full, code, err) => {
+                        setPhone(full);
+                        setCountryCode(code);
+                        setPhoneError(err);
+                      }} />
 
                       <div className="space-y-1.5">
                         <Label

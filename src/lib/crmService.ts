@@ -2,6 +2,7 @@ export interface LeadSubmissionData {
   fullName: string;
   email: string;
   phone: string;
+  countryCode?: string;
   message?: string;
   investmentGoal?: string;
 }
@@ -15,37 +16,60 @@ export interface SubmissionResponse {
 const CRM_HOST = import.meta.env.VITE_CRM_HOST || "https://crm.leadmanagement.api";
 const CRM_AUTH_TOKEN = import.meta.env.VITE_CRM_AUTH_TOKEN || "AFF_3_1c3fcc3cac32092698f62abxxxx";
 
+const DIAL_CODES: Record<string, string> = {
+  CH: "41",
+  US: "1",
+  GB: "44",
+  DE: "49",
+  IN: "91",
+  FR: "33",
+  BE: "32",
+  IT: "39",
+  ES: "34",
+  NL: "31",
+  AT: "43",
+  SE: "46",
+  CA: "1"
+};
+
+function formatPhoneForCRM(phoneInput: string, countryCode: string = "FR"): string {
+  let phone = (phoneInput || "").replace(/[^\d+]/g, "").trim();
+  const upperCountry = (countryCode || "FR").toUpperCase();
+  const code = DIAL_CODES[upperCountry] || "33";
+
+  if (phone) {
+    if (phone.startsWith("+")) {
+      phone = "00" + phone.slice(1);
+    }
+    if (phone.startsWith(code) && !phone.startsWith("00" + code)) {
+      phone = "00" + phone;
+    }
+    if (phone.startsWith("0") && !phone.startsWith("00")) {
+      phone = "00" + code + phone.slice(1);
+    }
+    if (!phone.startsWith("00")) {
+      phone = "00" + code + phone;
+    }
+  } else {
+    phone = "0000000000";
+  }
+  return phone;
+}
+
 export async function submitLeadToCRM(data: LeadSubmissionData): Promise<SubmissionResponse> {
   // Parse full name into first and last name
   const nameParts = data.fullName.trim().split(/\s+/);
   const first_name = nameParts[0] || "Unknown";
   const last_name = nameParts.slice(1).join(" ") || "Lead";
 
-  // Swiss phone auto-formatter
-  let phone = (data.phone || "").replace(/[^0-9+]/g, '');
-  if (phone) {
-    if (phone.startsWith('+')) {
-      phone = '00' + phone.slice(1);
-    }
-    if (phone.startsWith('41') && phone.length === 11) {
-      phone = '00' + phone;
-    }
-    if (!phone.startsWith('0041')) {
-      if (phone.startsWith('0') && !phone.startsWith('00')) {
-        phone = '0041' + phone.slice(1);
-      } else if (!phone.startsWith('00')) {
-        phone = '0041' + phone;
-      }
-    }
-  } else {
-    phone = "0000000000";
-  }
+  const countryCode = data.countryCode || "FR";
+  const formattedPhone = formatPhoneForCRM(data.phone, countryCode);
 
   // Build the payload per the specified API documentation
   const payload = {
-    country_name: "ch",
+    country_name: countryCode.toLowerCase(),
     description: data.message ? data.message.trim() : "Signup Lead",
-    phone: phone,
+    phone: formattedPhone,
     email: data.email,
     first_name: first_name,
     last_name: last_name,
@@ -93,6 +117,7 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       await response.text();
     }
 
+    incrementLeadCount();
     return {
       success: true,
       message: "Lead successfully created in CRM.",
@@ -123,4 +148,11 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       error,
     };
   }
+}
+
+
+function incrementLeadCount() {
+  fetch("/api/leads-count", { method: "POST" }).catch((err) =>
+    console.warn("[leads-count] Failed to increment:", err)
+  );
 }
