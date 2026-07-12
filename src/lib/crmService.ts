@@ -5,6 +5,7 @@ export interface LeadSubmissionData {
   countryCode?: string;
   message?: string;
   investmentGoal?: string;
+  type?: "contact" | "signup";
 }
 
 export interface SubmissionResponse {
@@ -106,28 +107,31 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       throw new Error(`HTTP error ${response.status}: ${errorText}`);
     }
 
+    // Since the document states "This request doesn't return any response body" for Example Response:
+    // "Example Response: Body Headers (0) No response body"
+    // we will check if there's content, otherwise return success.
+    let responseData: any = null;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      responseData = await response.json();
+      
+      // Check if CRM explicitly says it's invalid despite 200 OK
+      if (responseData && (responseData.error || responseData.success === false || responseData.status === "error" || (typeof responseData.message === "string" && responseData.message.toLowerCase().includes("invalid")))) {
+        throw new Error(responseData.message || responseData.error || "Invalid lead reported by CRM");
+      }
+    } else {
+      await response.text();
+    }
+
     try {
       const url = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_DASHBOARD_URL) || "https://lead-dashboard-orcin.vercel.app/api/increment";
       await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ website: "Finastra Daily", type: data.message ? "contact" : "signup", name: data.name, email: data.email})
+        body: JSON.stringify({ website: "Finastra Daily", type: data.type || (data.message ? "contact" : "signup"), name: data.fullName, email: data.email})
       }).catch(() => {});
     } catch(e){}
 
-
-    // Since the document states "This request doesn't return any response body" for Example Response:
-    // "Example Response: Body Headers (0) No response body"
-    // we will check if there's content, otherwise return success.
-    let responseData = null;
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      responseData = await response.json();
-    } else {
-      await response.text();
-    }
-
-    incrementLeadCount();
     return {
       success: true,
       message: "Lead successfully created in CRM.",
@@ -158,11 +162,4 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       error,
     };
   }
-}
-
-
-function incrementLeadCount() {
-  fetch("/api/leads-count", { method: "POST" }).catch((err) =>
-    console.warn("[leads-count] Failed to increment:", err)
-  );
 }

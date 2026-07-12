@@ -55,6 +55,7 @@ export function CryptoPortal({ onBack }: CryptoPortalProps) {
       countryCode,
       message,
       investmentGoal: "10000",
+      type: "contact",
     });
 
     if (response.success) {
