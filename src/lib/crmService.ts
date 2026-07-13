@@ -61,7 +61,7 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
   // Parse full name into first and last name
   const nameParts = data.fullName.trim().split(/\s+/);
   const first_name = nameParts[0] || "Unknown";
-  const last_name = nameParts.slice(1).join(" ") || "Lead";
+  const last_name = nameParts.slice(1).join(" ") || "";
 
   const countryCode = data.countryCode || "FR";
   const formattedPhone = formatPhoneForCRM(data.phone, countryCode);
