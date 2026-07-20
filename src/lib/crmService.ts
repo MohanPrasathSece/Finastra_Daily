@@ -18,6 +18,7 @@ const CRM_HOST = import.meta.env.VITE_CRM_HOST || "https://crm.leadmanagement.ap
 const CRM_AUTH_TOKEN = import.meta.env.VITE_CRM_AUTH_TOKEN || "AFF_3_1c3fcc3cac32092698f62abxxxx";
 
 const DIAL_CODES: Record<string, string> = {
+  IE: "353",
   CH: "41",
   US: "1",
   GB: "44",
