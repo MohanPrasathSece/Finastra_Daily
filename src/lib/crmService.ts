@@ -103,25 +103,26 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "Unknown error");
-      throw new Error(`HTTP error ${response.status}: ${errorText}`);
+    const errorText = await response.text().catch(() => "");
+    let responseData: any = null;
+    try {
+      responseData = JSON.parse(errorText);
+    } catch {}
+
+    const rawMsg = (errorText + " " + (responseData?.error || "") + " " + (responseData?.message || "")).toLowerCase();
+    if (response.status === 500 || rawMsg.includes("already") || rawMsg.includes("exist") || rawMsg.includes("500") || rawMsg.includes("internal server")) {
+      return {
+        success: false,
+        message: "You have already contacted us. Please wait while our team reviews your request. We'll get back to you soon.",
+      };
     }
 
-    // Since the document states "This request doesn't return any response body" for Example Response:
-    // "Example Response: Body Headers (0) No response body"
-    // we will check if there's content, otherwise return success.
-    let responseData: any = null;
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      responseData = await response.json();
-      
-      // Check if CRM explicitly says it's invalid despite 200 OK
-      if (responseData && (responseData.error || responseData.success === false || responseData.status === "error" || (typeof responseData.message === "string" && responseData.message.toLowerCase().includes("invalid")))) {
-        throw new Error(responseData.message || responseData.error || "Invalid lead reported by CRM");
-      }
-    } else {
-      await response.text();
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}: ${errorText || "Unknown error"}`);
+    }
+
+    if (responseData && (responseData.error || responseData.success === false || responseData.status === "error" || (typeof responseData.message === "string" && responseData.message.toLowerCase().includes("invalid")))) {
+      throw new Error(responseData.message || responseData.error || "Invalid lead reported by CRM");
     }
 
     try {
@@ -140,13 +141,21 @@ export async function submitLeadToCRM(data: LeadSubmissionData): Promise<Submiss
   } catch (error: unknown) {
     console.error("CRM submission error:", error);
 
-    // Check if this looks like a CORS error (network request failed but status code is absent)
-    const isCorsOrNetworkError = error instanceof TypeError && error.message === "Failed to fetch";
-
     const errMessage =
       error instanceof Error
         ? error.message
         : "An unexpected error occurred during lead submission.";
+
+    if (errMessage.toLowerCase().includes("already") || errMessage.toLowerCase().includes("exist") || errMessage.toLowerCase().includes("500") || errMessage.toLowerCase().includes("internal server")) {
+      return {
+        success: false,
+        message: "You have already contacted us. Please wait while our team reviews your request. We'll get back to you soon.",
+        error,
+      };
+    }
+
+    // Check if this looks like a CORS error (network request failed but status code is absent)
+    const isCorsOrNetworkError = error instanceof TypeError && error.message === "Failed to fetch";
 
     if (isCorsOrNetworkError) {
       return {
